@@ -1,11 +1,8 @@
 import os
-import pickle
-import re
 import numpy as np
 import pandas as pd
 import torch
 import torch.utils.data as data
-from nltk.tokenize import RegexpTokenizer
 from tqdm import tqdm
 from transformers import BertTokenizer
 import cv2
@@ -26,6 +23,12 @@ import nibabel as nib
 import random
 import shutil
 
+from dataloader.mimic_cxr_report_dataset import (
+    load_or_build_path2sent_csv,
+    normalize_report_paths_in_df,
+)
+from dataloader.mimic_cxr_image_dataset import collect_xray_image_paths, load_xray_image_pil_rgb
+from dataloader.TCGA_dataset import collect_pathology_image_paths, load_pathology_image_pil_rgb
 
 
 class DataTransforms(object):
@@ -181,11 +184,10 @@ class Buffer_Dataset(data.Dataset):
 
             self.df = pd.read_csv(os.path.join(buffer_file_path, file_name))
             self.df = self.df[self.df["ViewPosition"].isin(["PA", "AP"])]
-            self.df["Path"] = self.df["Path"].apply(
-                lambda x: os.path.join(data_path_text, "/".join(x.split("/")[1:])))
+            normalize_report_paths_in_df(self.df, data_path_text)
 
-            # load studies and study to text mapping
-            self.text_filenames, self.path2sent = self.load_text_data(split, self.df)
+            captions_csv_path = os.path.join(buffer_file_path, file_name)
+            self.text_filenames, self.path2sent = self.load_text_data(split, captions_csv_path)
 
             self.df = self.df[self.df["split"] == split]
             if data_pct != 1.0 and split == "train":
@@ -206,11 +208,10 @@ class Buffer_Dataset(data.Dataset):
             self.imsize = imsize
             self.df = pd.read_csv(os.path.join(data_path_text, file_name))
             self.df = self.df[self.df["ViewPosition"].isin(["PA", "AP"])]
-            self.df["Path"] = self.df["Path"].apply(
-                lambda x: os.path.join(data_path_text, "/".join(x.split("/")[1:])))
+            normalize_report_paths_in_df(self.df, data_path_text)
 
-            # load studies and study to text mapping
-            self.text_filenames, self.path2sent = self.load_text_data(split, self.df)
+            captions_csv_path = os.path.join(data_path_text, file_name)
+            self.text_filenames, self.path2sent = self.load_text_data(split, captions_csv_path)
 
             self.df = self.df[self.df["split"] == split]
             if data_pct != 1.0 and split == "train":
@@ -248,14 +249,10 @@ class Buffer_Dataset(data.Dataset):
             print("xray sample number: ", len(self.xray_image_path))
 
         elif "2D_xray" in task_data:
-            file_name = "pretrain_data_list.json"
-
             if not os.path.exists(data_path_xray):
                 raise RuntimeError(f"{data_path_xray} does not exist!")
 
-            # find all images
-            self.xray_image_path = []
-            self.xray_image_path = load_json(os.path.join(data_path_xray, file_name))["path"]
+            self.xray_image_path = collect_xray_image_paths(data_path_xray)
             self.xray_tr_transforms2D = get_train_transform2D(imsize)
 
             print("xray sample number: ", len(self.xray_image_path))
@@ -361,17 +358,7 @@ class Buffer_Dataset(data.Dataset):
             if not os.path.exists(data_path_path):
                 raise RuntimeError(f"{data_path_path} does not exist!")
 
-            # find all images
-            self.path_image_path = []
-            if os.path.exists(os.path.join(data_path_path, "pretrain_data_list.json")):
-                self.path_image_path = load_json(os.path.join(data_path_path, "pretrain_data_list.json"))["path"]
-            else:
-                for root, dirs, files in tqdm(os.walk(data_path_path)):
-                    for file in files:
-                        if ".jpg" in file:
-                            self.path_image_path.append(os.path.join(root, file))
-                path_data_list = {"path": self.path_image_path}
-                save_json(path_data_list, os.path.join(data_path_path, "pretrain_data_list.json"))
+            self.path_image_path = collect_pathology_image_paths(data_path_path)
 
             self.path_tr_transforms2D = get_train_transform2D(imsize)
             print("pathology sample number: ", len(self.path_image_path))
@@ -394,97 +381,16 @@ class Buffer_Dataset(data.Dataset):
                batch_size), len(self.mr_files) // (batch_size), len(self.path_image_path) // (batch_size)))
 
 
-    def load_text_data(self, split, df):
-        # get study to captions mapping
-        # TODO: check this
-        filepath = os.path.join(
-            BASE_DIR, "mimic_report_captions.pickle")
-        if not os.path.isfile(filepath):
-            print(
-                f"Caption file {filepath} does not exit. Creating captions...")
-            path2sent = self.create_path_2_sent_mapping()
-            with open(filepath, "wb") as f:
-                pickle.dump(path2sent, f, protocol=2)
-                print("Save to: ", filepath)
-        else:
-            with open(filepath, "rb") as f:
-                path2sent = pickle.load(f)
-
-        # filter studies to use for current split
+    def load_text_data(self, split, captions_csv_path):
+        path2sent = load_or_build_path2sent_csv(captions_csv_path, self.df)
         filenames = []
-        for row in df.itertuples():
+        for row in self.df.itertuples():
             cur_split = getattr(row, "split")
             path = getattr(row, "Path")
             if cur_split == split and path in path2sent:
                 filenames.append(path)
 
         return filenames, path2sent
-
-    def create_path_2_sent_mapping(self):
-        sent_lens, num_sents = [], []
-        path2sent = {}
-        # iterrows is not faster than itertuples ...  but it is ok
-        for _, row in tqdm(self.df.iterrows(), total=self.df.shape[0]):
-            # pick impression, findings, last_paragraph
-            captions = ""
-            captions += row["impression"]
-            captions += " "
-            captions += row["findings"]
-
-            # use space instead of newline
-            captions = captions.replace("\n", " ")
-
-            # split sentences
-            splitter = re.compile("[0-9]+\.")
-            captions = splitter.split(captions)
-            captions = [point.split(".") for point in captions]
-            captions = [sent for point in captions for sent in point]
-
-            cnt = 0
-            study_sent = []
-            # create tokens from captions
-            for cap in captions:
-                if len(cap) == 0:
-                    continue
-
-                cap = cap.replace("\ufffd\ufffd", " ")
-                # picks out sequences of alphanumeric characters as tokens
-                # and drops everything else
-                tokenizer = RegexpTokenizer(r"\w+")
-                tokens = tokenizer.tokenize(cap.lower())
-                # TODO: < 3 has instances of ['no', 'pneumothorax'], ['clear', 'lung']
-                if len(tokens) <= 1:
-                    continue
-
-                # filter tokens for current sentence
-                included_tokens = []
-                for t in tokens:
-                    t = t.encode("ascii", "ignore").decode("ascii")
-                    if len(t) > 0:
-                        included_tokens.append(t)
-
-                if len(included_tokens) > 0:
-                    study_sent.append(" ".join(included_tokens))
-
-                cnt += len(included_tokens)
-
-            if cnt >= 3:
-                sent_lens.append(cnt)
-                num_sents.append(len(study_sent))
-                path2sent[row["Path"]] = study_sent
-
-        # get report word/setence statistics
-        sent_lens = np.array(sent_lens)
-        num_sents = np.array(num_sents)
-
-        print(
-            f"sent lens: {sent_lens.min()},{sent_lens.mean()},{sent_lens.max()} [{np.percentile(sent_lens, 5)}, {np.percentile(sent_lens, 95)}]"
-        )
-        print(
-            f"num sents: {num_sents.min()},{num_sents.mean()},{num_sents.max()} [{np.percentile(num_sents, 5)}, {np.percentile(num_sents, 95)}]"
-        )
-
-        return path2sent
 
     def __len__(self):
         return len(self.files)
@@ -537,10 +443,7 @@ class Buffer_Dataset(data.Dataset):
             image2Ds = torch.zeros(size=(self.batch_size, 3, self.imsize, self.imsize))
             for j, img_path in enumerate(selected_keys):
 
-                image2D = cv2.imread(img_path, 0)
-                image2D = Image.fromarray(image2D).convert("RGB")
-                # print(image2D.size)
-                # image2D = image2D[:, :]
+                image2D = load_xray_image_pil_rgb(img_path)
                 image2D_trans = self.xray_tr_transforms2D(image2D)
                 image2Ds[j] = image2D_trans
             return image2Ds, task_id
@@ -593,10 +496,7 @@ class Buffer_Dataset(data.Dataset):
             image2Ds = torch.zeros(size=(self.batch_size, 3, self.imsize, self.imsize))
             for j, img_path in enumerate(selected_keys):
 
-                image2D = cv2.imread(img_path)
-                image2D = Image.fromarray(image2D)
-                # print(image2D.size)
-                # image2D = image2D[:, :]
+                image2D = load_pathology_image_pil_rgb(img_path)
                 image2D_trans = self.path_tr_transforms2D(image2D)
                 image2Ds[j] = image2D_trans
             return image2Ds, task_id

@@ -32,6 +32,7 @@ from dataloader.mimic_cxr_image_dataset import MIMIC_CXR_Image_Dataset_name, my_
 from dataloader.DeepLesion_dataset import DeepLesion_dataset_name, my_collate_CT
 from dataloader.ADNI_dataset import ADNI_dataset_name, my_collate_MR
 from dataloader.TCGA_dataset import TCGA_Image_Dataset_name, my_collate_path
+from dataloader.mimic_cxr_report_dataset import normalize_report_paths_in_df
 from model.Unimodel import Unified_Model
 from typing import Iterable
 
@@ -229,10 +230,10 @@ def estimate_kmean(save_path, task_id, model: torch.nn.Module,
             os.remove(os.path.join(save_path, file_path))
         
         df = pd.read_csv(os.path.join(args.data_path, "master.csv"))
+        normalize_report_paths_in_df(df, args.data_path)
         for itr in tqdm.tqdm(range(num_clusters)):
-            top_k_name = top_k_samples_name[itr]
-            top_k_name = [spare_name.replace("/data/userdisk0/ywye/Pretrained_dataset/1D/2019.MIMIC-CXR-JPG/", "") for spare_name in top_k_name] #Need to modify
-            filtered_df = df[df['Path'].isin(top_k_name)]
+            top_k_name = list(top_k_samples_name[itr])
+            filtered_df = df[df["Path"].isin(top_k_name)]
             assert len(top_k_name) == len(filtered_df)
             write_header = not pd.io.common.file_exists(os.path.join(save_path, file_path))
             filtered_df.to_csv(os.path.join(save_path, file_path), index=False, mode='a', header=write_header)
