@@ -44,7 +44,7 @@ meid='_'$exp_name'/seed_'$seed'/lr_'$lr'/'
 path_id=$task_id$meid
 echo $task_id" Training - shallow"
 snapshot_dir='snapshots/downstream/dim_1/'$path_id
-mkdir $snapshot_dir
+mkdir -p $snapshot_dir
 CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_1/PudMed20k/main.py \
 --arch='unified_vit' \
 --data_path=$data_path \
@@ -70,7 +70,7 @@ meid='_'$exp_name'/seed_'$seed'/lr_'$lr'/'
 path_id=$task_id$meid
 echo $task_id" Training - shallow"
 snapshot_dir='snapshots/downstream/dim_1/'$path_id
-mkdir $snapshot_dir
+mkdir -p $snapshot_dir
 CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_1/PudMed20k/main.py \
 --arch='unified_vit' \
 --data_path=$data_path \
@@ -96,7 +96,7 @@ meid='_'$exp_name'/seed_'$seed'/lr_'$lr'/'
 path_id=$task_id$meid
 echo $task_id" Training - shallow"
 snapshot_dir='snapshots/downstream/dim_1/'$path_id
-mkdir $snapshot_dir
+mkdir -p $snapshot_dir
 CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_1/PudMed20k/main.py \
 --arch='unified_vit' \
 --data_path=$data_path \
@@ -132,7 +132,7 @@ meid='_'$exp_name'/seed_'$seed'/lr_'$lr'/'
 path_id=$task_id$meid
 echo $task_id" Training - shallow"
 snapshot_dir='snapshots/downstream/dim_2/'$path_id
-mkdir $snapshot_dir
+mkdir -p $snapshot_dir
 CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/Chest_XR/main.py \
 --arch='unified_vit' \
 --data_path=$data_path \
@@ -156,7 +156,7 @@ meid='_'$exp_name'/seed_'$seed'/lr_'$lr'/'
 path_id=$task_id$meid
 echo $task_id" Training - shallow"
 snapshot_dir='snapshots/downstream/dim_2/'$path_id
-mkdir $snapshot_dir
+mkdir -p $snapshot_dir
 CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/Chest_XR/main.py \
 --arch='unified_vit' \
 --data_path=$data_path \
@@ -181,7 +181,7 @@ meid='_'$exp_name'/seed_'$seed'/lr_'$lr'/'
 path_id=$task_id$meid
 echo $task_id" Training - shallow"
 snapshot_dir='snapshots/downstream/dim_2/'$path_id
-mkdir $snapshot_dir
+mkdir -p $snapshot_dir
 CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/Chest_XR/main.py \
 --arch='unified_vit' \
 --data_path=$data_path \
@@ -216,7 +216,7 @@ meid='_'$exp_name'/seed_'$seed'/lr_'$lr'/'
 path_id=$task_id$meid
 echo $task_id" Training - shallow"
 snapshot_dir='snapshots/downstream/dim_2/'$path_id
-mkdir $snapshot_dir
+mkdir -p $snapshot_dir
 CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/NCT_CRC_HE/main.py \
 --arch='unified_vit' \
 --data_path=$data_path \
@@ -240,7 +240,7 @@ meid='_'$exp_name'/seed_'$seed'/lr_'$lr'/'
 path_id=$task_id$meid
 echo $task_id" Training - shallow"
 snapshot_dir='snapshots/downstream/dim_2/'$path_id
-mkdir $snapshot_dir
+mkdir -p $snapshot_dir
 CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/NCT_CRC_HE/main.py \
 --arch='unified_vit' \
 --data_path=$data_path \
@@ -264,7 +264,7 @@ meid='_'$exp_name'/seed_'$seed'/lr_'$lr'/'
 path_id=$task_id$meid
 echo $task_id" Training - shallow"
 snapshot_dir='snapshots/downstream/dim_2/'$path_id
-mkdir $snapshot_dir
+mkdir -p $snapshot_dir
 CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/NCT_CRC_HE/main.py \
 --arch='unified_vit' \
 --data_path=$data_path \
@@ -298,7 +298,7 @@ meid='_'$exp_name'/seed_'$seed'/lr_'$lr'/'
 path_id=$task_id$meid
 echo $task_id" Training - shallow"
 snapshot_dir='snapshots/downstream/dim_2/'$path_id
-mkdir $snapshot_dir
+mkdir -p $snapshot_dir
 CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/Glas/train.py \
 --arch='unified_vit' \
 --data_dir=$nnudata \
@@ -342,7 +342,7 @@ meid='_'$exp_name'/seed_'$seed'/lr_'$lr'/'
 path_id=$task_id$meid
 echo $task_id" Training - shallow"
 snapshot_dir='snapshots/downstream/dim_2/'$path_id
-mkdir $snapshot_dir
+mkdir -p $snapshot_dir
 CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/Glas/train.py \
 --arch='unified_vit' \
 --data_dir=$nnudata \
@@ -386,7 +386,7 @@ meid='_'$exp_name'/seed_'$seed'/lr_'$lr'/'
 path_id=$task_id$meid
 echo $task_id" Training - shallow"
 snapshot_dir='snapshots/downstream/dim_2/'$path_id
-mkdir $snapshot_dir
+mkdir -p $snapshot_dir
 CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/Glas/train.py \
 --arch='unified_vit' \
 --data_dir=$nnudata \
