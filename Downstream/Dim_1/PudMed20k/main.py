@@ -9,18 +9,12 @@ import timeit, time
 from utils.ParaFlop import print_model_parm_nums
 from engine import Engine
 try:
-    try:
     from apex import amp
 except ImportError:
     amp = None
-except ImportError:
-    amp = None
+
 try:
-    try:
     from apex.parallel import convert_syncbn_model
-except ImportError:
-    def convert_syncbn_model(module):
-        return module
 except ImportError:
     def convert_syncbn_model(module):
         return module
