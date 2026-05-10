@@ -165,7 +165,9 @@ class MIMIC_CXR_Image_Dataset_name(data.Dataset):
 
         self.image_path = collect_xray_image_paths(data_path)
 
-        self.tr_transforms2D = transforms.ToTensor()
+        # Match MIMIC_CXR_Image_Dataset / Jointly 2D_xray: fixed crop size so tensors are [3,224,224]
+        # (ToTensor-only would leave native H×W and break ViT spatial_pos_embed vs training).
+        self.tr_transforms2D = get_train_transform2D(imsize)
 
         if is_sort:
             self.img_ids = sorted(self.image_path)

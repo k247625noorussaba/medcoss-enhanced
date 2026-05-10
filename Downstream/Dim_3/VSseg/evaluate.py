@@ -1,6 +1,18 @@
 import argparse
 import os, sys
 sys.path.append("..")
+from pathlib import Path
+for _medcoss_repo in Path(__file__).resolve().parents:
+    if (_medcoss_repo / "util" / "torch_load_compat.py").is_file():
+        _sr = str(_medcoss_repo)
+        if _sr not in sys.path:
+            sys.path.insert(0, _sr)
+        break
+else:
+    raise ImportError(
+        "MedCoSS repo root not found above %s (missing util/torch_load_compat.py)" % (__file__,)
+    )
+from util.torch_load_compat import torch_load_compat
 import torch
 import numpy as np
 import torch.backends.cudnn as cudnn
@@ -468,13 +480,13 @@ def main():
             print('loading from checkpoint: {}'.format(args.checkpoint_path))
             if os.path.exists(args.checkpoint_path):
                 if args.FP16:
-                    checkpoint = torch.load(args.checkpoint_path, map_location=torch.device('cpu'))
+                    checkpoint = torch_load_compat(args.checkpoint_path, map_location=torch.device('cpu'))
                     pre_dict = {k.replace("module.", ""): v for k, v in checkpoint['model'].items()}
                     # pre_dict = checkpoint['model']
                     model.load_state_dict(pre_dict)
                     scaler.load_state_dict(checkpoint['scaler'])
                 else:
-                    checkpoint = torch.load(args.checkpoint_path, map_location=torch.device('cpu'))
+                    checkpoint = torch_load_compat(args.checkpoint_path, map_location=torch.device('cpu'))
                     pre_dict = {k.replace("module.", ""): v for k, v in checkpoint['model'].items()}
                     model.load_state_dict(pre_dict)
             else:

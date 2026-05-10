@@ -27,6 +27,7 @@ import timm.optim.optim_factory as optim_factory
 
 import util.misc as misc
 from util.misc import NativeScalerWithGradNormCount as NativeScaler
+from util.torch_load_compat import torch_load_compat
 from dataloader.mimic_cxr_report_dataset import MIMIC_CXR_Report_Dataset_name, my_collate_text
 from dataloader.mimic_cxr_image_dataset import MIMIC_CXR_Image_Dataset_name, my_collate_xray
 from dataloader.DeepLesion_dataset import DeepLesion_dataset_name, my_collate_CT
@@ -125,7 +126,7 @@ def main(args):
 
     model = Unified_Model(now_1D_input_size=(112,  1), now_2D_input_size=(224, 224), now_3D_input_size=(16, 192, 192), norm_pix_loss=args.norm_pix_loss)
     print("load pretrained parameter from ", args.load_current_pretrained_weight)
-    pretrained_weight = torch.load(args.load_current_pretrained_weight, map_location='cpu')
+    pretrained_weight = torch_load_compat(args.load_current_pretrained_weight, map_location='cpu')
     model.load_state_dict(pretrained_weight["model"], strict=False)
     print("load pre-trained model success!")
     model.to(device)

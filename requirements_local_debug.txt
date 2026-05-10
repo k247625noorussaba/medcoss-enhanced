@@ -1,0 +1,71 @@
+# =============================================================================
+# MedCoSS — LOCAL DEBUG (WSL2 Ubuntu, RTX 5060, newer PyTorch / CUDA 12.x)
+# =============================================================================
+# NOT for RunPod production. Intended for run_ssl_debug_local.sh / run_ds_debug_local.sh.
+#
+# Python 3.14 disclaimer:
+#   Official PyTorch wheels may lag newest CPython. If cp314 wheels are missing,
+#   use Python 3.12/3.11 venv for PyTorch, or install torch from the nightly index
+#   only when a matching cp314 build exists.
+#
+# PyTorch / CUDA:
+#   Pick ONE index matching your driver + CUDA userland (example: CUDA 12.8 nightly):
+#     pip install --upgrade pip
+#     pip install torch torchvision --index-url https://download.pytorch.org/whl/nightly/cu128
+#   Adjust cu121 / cu124 / cu128 as appropriate; verify at https://pytorch.org/get-started/locally/
+#
+# NVIDIA Apex:
+#   Downstream Dim_2 scripts still `import apex`. Apex often does NOT compile against
+#   arbitrary torch 2.x nightlies. For local debug you may need:
+#     - a source-built apex matching your exact torch+cuda, OR
+#     - a follow-up code change to drop apex (out of scope for this file).
+#
+# timm / transformers:
+#   timm==0.4.12 matches MedCoSS import paths (optim_factory, DropPath, ViT blocks). Newer
+#   timm 1.x may break those imports — keep the pin.
+# =============================================================================
+
+# --- PyTorch stack (install via index URL; do not rely on this line alone) ---
+# torch
+# torchvision
+# torchaudio  # optional; not imported by MedCoSS paths audited for this file
+
+# --- Core numerics / tables ---
+numpy>=1.26.0
+pandas>=2.0.0
+
+# --- CV / I/O ---
+opencv-python>=4.8.0
+Pillow>=10.0.0
+pydicom>=2.4.0
+nibabel>=5.0.0
+SimpleITK>=2.3.0
+batchgenerators>=0.25
+medpy>=0.5.0
+
+# --- NLP ---
+transformers==4.30.2
+nltk>=3.8.0
+# python -c "import nltk; nltk.download('punkt')"
+
+# --- ViT / optim ---
+timm==0.4.12
+einops>=0.7.0
+
+# --- GlaS Unified_Model blocks (Downstream/Dim_2/Glas/model/Unimodel.py) ---
+# Pin against your installed torch (MONAI release notes); nightly torch may need latest MONAI.
+monai>=1.3.0
+
+# --- ML utilities ---
+scikit-learn>=1.3.0
+scipy>=1.10.0,<1.12.0
+# Pin scipy upper bound for scipy.misc used by Glas/evaluate.py (legacy import path).
+
+# --- Plotting / metrics ---
+matplotlib>=3.7.0
+scikit-image>=0.21.0
+
+# --- Logging ---
+tensorboard>=2.14.0
+tensorboardX>=2.6.0
+tqdm>=4.66.0

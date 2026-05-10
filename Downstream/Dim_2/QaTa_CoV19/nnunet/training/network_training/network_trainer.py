@@ -27,10 +27,22 @@ from torch.optim.lr_scheduler import _LRScheduler
 matplotlib.use("agg")
 from time import time, sleep
 import torch
+from pathlib import Path
+import sys
+for _medcoss_repo in Path(__file__).resolve().parents:
+    if (_medcoss_repo / "util" / "torch_load_compat.py").is_file():
+        _sr = str(_medcoss_repo)
+        if _sr not in sys.path:
+            sys.path.insert(0, _sr)
+        break
+else:
+    raise ImportError(
+        "MedCoSS repo root not found above %s (missing util/torch_load_compat.py)" % (__file__,)
+    )
+from util.torch_load_compat import torch_load_compat
 import numpy as np
 from torch.optim import lr_scheduler
 import matplotlib.pyplot as plt
-import sys
 from collections import OrderedDict
 import torch.backends.cudnn as cudnn
 from abc import abstractmethod
@@ -317,7 +329,7 @@ class NetworkTrainer(object):
         if not self.was_initialized:
             self.initialize(train)
         # saved_model = torch.load(fname, map_location=torch.device('cuda', torch.cuda.current_device()))
-        saved_model = torch.load(fname, map_location=torch.device('cpu'))
+        saved_model = torch_load_compat(fname, map_location=torch.device('cpu'))
         self.load_checkpoint_ram(saved_model, train)
 
     @abstractmethod

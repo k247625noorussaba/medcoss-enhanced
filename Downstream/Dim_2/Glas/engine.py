@@ -11,9 +11,11 @@ from utils.pyt_utils import parse_devices, all_reduce_tensor, extant_file
 
 try:
     from apex.parallel import DistributedDataParallel, SyncBatchNorm
+    APEX_AVAILABLE = True
 except ImportError:
-    raise ImportError(
-        "Please install apex from https://www.github.com/nvidia/apex .")
+    from torch.nn.parallel import DistributedDataParallel
+    SyncBatchNorm = torch.nn.SyncBatchNorm
+    APEX_AVAILABLE = False
 
 
 logger = get_logger()
@@ -66,7 +68,14 @@ class Engine(object):
 
     def data_parallel(self, model):
         if self.distributed:
-            model = DistributedDataParallel(model)
+            if APEX_AVAILABLE:
+                model = DistributedDataParallel(model)
+            else:
+                model = DistributedDataParallel(
+                    model,
+                    device_ids=[self.local_rank],
+                    output_device=self.local_rank,
+                )
         else:
             model = torch.nn.DataParallel(model)
         return model

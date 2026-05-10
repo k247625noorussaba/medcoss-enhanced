@@ -21,7 +21,7 @@ def resize_image_itk(itkimage, newSize, resamplemethod=sitk.sitkLinear):
     newSize = np.array(newSize,float)
     factor = originSize / newSize
     newSpacing = originSpacing * factor
-    newSize = newSize.astype(np.int)
+    newSize = newSize.astype(np.int64)
     resampler.SetReferenceImage(itkimage)
     resampler.SetSize(newSize.tolist())
     resampler.SetOutputSpacing(newSpacing.tolist())

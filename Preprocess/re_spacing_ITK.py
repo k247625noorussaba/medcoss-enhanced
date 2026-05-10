@@ -46,7 +46,7 @@ def processing(root, i_files):
     data_type = image.dtype
     order = 3
 
-    image = image.astype(np.float)
+    image = image.astype(np.float64)
     image = truncate(image)
 
     image_resize = resize(image, (

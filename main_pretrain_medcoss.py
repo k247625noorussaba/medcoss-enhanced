@@ -14,6 +14,7 @@ import timm
 import timm.optim.optim_factory as optim_factory
 import util.misc as misc
 from util.misc import NativeScalerWithGradNormCount as NativeScaler
+from util.torch_load_compat import torch_load_compat
 import util
 from dataloader.Jointly_Dataset import Buffer_Dataset
 from model.Unimodel import Unified_Model
@@ -169,7 +170,7 @@ def main(args):
 
     model = Unified_Model(now_1D_input_size=(112,1), now_2D_input_size=(224, 224), now_3D_input_size=(16, 192, 192), norm_pix_loss=args.norm_pix_loss)
     print("load student pretrained parameter from ", args.load_current_pretrained_weight)
-    pretrained_weight = torch.load(args.load_current_pretrained_weight, map_location='cpu')
+    pretrained_weight = torch_load_compat(args.load_current_pretrained_weight, map_location='cpu')
     pre_dict = pretrained_weight["model"]
     model_dict = model.state_dict()
     # print(model_dict)
@@ -192,16 +193,16 @@ def main(args):
     print("load pre-trained model success!")
     del pre_dict, pretrained_weight, model_dict
     model.to(device)
-
+    model_without_ddp = model
 
     teacher_model = Teacher_Unified_Model(now_1D_input_size=(112, 1), norm_pix_loss=args.norm_pix_loss)
     model_dict = teacher_model.state_dict()
     if args.load_teacher_weight != "":
         print("load teacher pretrained parameters from ", args.load_teacher_weight)
-        pretrained_weight = torch.load(args.load_teacher_weight, map_location='cpu')
+        pretrained_weight = torch_load_compat(args.load_teacher_weight, map_location='cpu')
     else:
         print("load teacher pretrained parameters from ", args.load_current_pretrained_weight)
-        pretrained_weight = torch.load(args.load_current_pretrained_weight, map_location='cpu')
+        pretrained_weight = torch_load_compat(args.load_current_pretrained_weight, map_location='cpu')
     pre_dict = pretrained_weight["model"]
     updated_keys = []
     not_found_keys = []
@@ -219,8 +220,8 @@ def main(args):
     print("load pre-trained model success!")
     del pre_dict, pretrained_weight, model_dict
     teacher_model.to(device)
+    teacher_model_without_ddp = teacher_model
 
- 
     # print("Model = %s" % str(model_without_ddp))
     #
     eff_batch_size = args.batch_size * args.accum_iter * misc.get_world_size()

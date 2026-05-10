@@ -1,6 +1,20 @@
 import argparse
 import os, sys
 sys.path.append("..")
+from pathlib import Path
+for _medcoss_repo in Path(__file__).resolve().parents:
+    if (_medcoss_repo / "util" / "torch_load_compat.py").is_file():
+        _sr = str(_medcoss_repo)
+        if _sr not in sys.path:
+            sys.path.insert(0, _sr)
+        break
+else:
+    raise ImportError(
+        "MedCoSS repo root not found above %s (missing util/torch_load_compat.py)" % (__file__,)
+    )
+from util.torch_load_compat import torch_load_compat
+# Repo root is on sys.path for util.*; ensure this task's package wins for `model` (seg vs pretrain API).
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 import torch
 import numpy as np
 import torch.backends.cudnn as cudnn
@@ -14,8 +28,15 @@ import loss_Single as loss
 from utils.ParaFlop import print_model_parm_nums
 from model.Unimodel import Unified_Model
 from engine import Engine
-from apex import amp
-from apex.parallel import convert_syncbn_model
+try:
+    from apex import amp
+except ImportError:
+    amp = None
+try:
+    from apex.parallel import convert_syncbn_model
+except ImportError:
+    def convert_syncbn_model(module):
+        return module
 from torch.cuda.amp import GradScaler, autocast
 import shutil
 import torch.nn.functional as F
@@ -211,7 +232,8 @@ def main():
 
         if args.FP16:
             print("Note: Using FP16 during training************")
-            model, optimizer = amp.initialize(model, optimizer, opt_level="O1")
+            if amp is not None:
+                model, optimizer = amp.initialize(model, optimizer, opt_level="O1")
         if args.FP16:
             print("Using FP16 for training!!!")
             scaler = torch.cuda.amp.GradScaler()
@@ -362,7 +384,7 @@ def restart_from_checkpoint(ckp_path, run_variables=None, **kwargs):
         return
     print("Found checkpoint at {}".format(ckp_path))
 
-    checkpoint = torch.load(ckp_path, map_location="cpu")
+    checkpoint = torch_load_compat(ckp_path, map_location="cpu")
     for key, value in kwargs.items():
         if key in checkpoint and value is not None:
             try:

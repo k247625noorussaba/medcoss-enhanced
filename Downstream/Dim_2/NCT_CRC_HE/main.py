@@ -1,4 +1,5 @@
 import argparse
+import json
 import os, sys
 import numpy as np
 from dataloader import NCT_CRC_HE_Dataset
@@ -7,11 +8,31 @@ from model.Unimodel import Unified_Model
 import timeit, time
 from utils.ParaFlop import print_model_parm_nums
 from engine import Engine
-from apex import amp
-from apex.parallel import convert_syncbn_model
+try:
+    from apex import amp
+except ImportError:
+    amp = None
+try:
+    from apex.parallel import convert_syncbn_model
+except ImportError:
+    def convert_syncbn_model(module):
+        return module
 from torch.cuda.amp import GradScaler, autocast
 import shutil
 import torch
+from pathlib import Path
+import sys
+for _medcoss_repo in Path(__file__).resolve().parents:
+    if (_medcoss_repo / "util" / "torch_load_compat.py").is_file():
+        _sr = str(_medcoss_repo)
+        if _sr not in sys.path:
+            sys.path.insert(0, _sr)
+        break
+else:
+    raise ImportError(
+        "MedCoSS repo root not found above %s (missing util/torch_load_compat.py)" % (__file__,)
+    )
+from util.torch_load_compat import torch_load_compat
 from tqdm import tqdm
 from sklearn import metrics
 from sklearn.metrics import roc_auc_score
@@ -181,7 +202,8 @@ def main():
 
         if args.FP16:
             print("Note: Using FP16 during training************")
-            model, optimizer = amp.initialize(model, optimizer, opt_level="O1")
+            if amp is not None:
+                model, optimizer = amp.initialize(model, optimizer, opt_level="O1")
         if args.FP16:
             print("Using FP16 for training!!!")
             scaler = torch.cuda.amp.GradScaler()
@@ -308,9 +330,15 @@ def main():
                                                                                            int(time_t2 - time_t1)))
 
         model.eval()
-        print("load best weight from", osp.join(args.snapshot_dir, 'checkpoint.pth'))
-        best_performance_weight = torch.load(osp.join(args.snapshot_dir, 'checkpoint.pth'))['model']
-        model.load_state_dict(best_performance_weight, strict=True)
+        checkpoint_path = osp.join(args.snapshot_dir, 'checkpoint.pth')
+        print("load best weight from", checkpoint_path)
+        if osp.exists(checkpoint_path):
+            best_performance_weight = torch_load_compat(checkpoint_path)['model']
+            model.load_state_dict(best_performance_weight, strict=True)
+        else:
+            print(
+                f"WARNING: {checkpoint_path} not found; using current model weights for evaluation."
+            )
         model.cal_acc = True
         test_acc = []
         pre_score = []
@@ -334,6 +362,20 @@ def main():
         test_acc_mean = np.mean(test_acc)
         # test_f1_mean = np.mean(test_f1)
         print("test dataset acc: {}, auc: {}, f1: {}".format(test_acc_mean, val_auc, val_f1))
+        os.makedirs(args.snapshot_dir, exist_ok=True)
+        metrics_payload = {
+            "task": "NCT_CRC_HE",
+            "split": "test",
+            "acc": float(test_acc_mean),
+            "auc": float(val_auc),
+            "f1": float(val_f1),
+            "snapshot_dir": args.snapshot_dir,
+            "pretrained_path": args.pretrained_path if hasattr(args, "pretrained_path") else None,
+        }
+        _metrics_path = osp.join(args.snapshot_dir, "metrics.json")
+        with open(_metrics_path, "w") as fp:
+            json.dump(metrics_payload, fp, indent=2)
+        print("Saved metrics to {}".format(_metrics_path))
         with open(os.path.join(args.snapshot_dir, "result.txt"), "w") as fp:
             fp.write("test dataset acc: {}, auc: {}, f1: {}".format(test_acc_mean, val_auc, val_f1))
         end = timeit.default_timer()
@@ -347,7 +389,7 @@ def restart_from_checkpoint(ckp_path, run_variables=None, **kwargs):
         return
     print("Found checkpoint at {}".format(ckp_path))
 
-    checkpoint = torch.load(ckp_path, map_location="cpu")
+    checkpoint = torch_load_compat(ckp_path, map_location="cpu")
     for key, value in kwargs.items():
         if key in checkpoint and value is not None:
             try:

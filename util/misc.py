@@ -18,7 +18,9 @@ from pathlib import Path
 
 import torch
 import torch.distributed as dist
-from torch._six import inf
+from math import inf
+
+from util.torch_load_compat import torch_load_compat
 
 def add_weight_decay_lr(model, lr, slower_lr, slower_learner_name: list, weight_decay=1e-5, skip_list=()):
     decay_lr, decay_slower_lr = [], []
@@ -447,7 +449,7 @@ def load_model(args, model_without_ddp, optimizer, loss_scaler):
             checkpoint = torch.hub.load_state_dict_from_url(
                 args.resume, map_location='cpu', check_hash=True)
         else:
-            checkpoint = torch.load(args.resume, map_location='cpu')
+            checkpoint = torch_load_compat(args.resume, map_location='cpu')
 
         model_without_ddp.load_state_dict(checkpoint['model'])
         print("Resume checkpoint %s" % args.resume)

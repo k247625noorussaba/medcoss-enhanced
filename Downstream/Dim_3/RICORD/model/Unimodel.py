@@ -14,6 +14,19 @@ from transformers import (
     BertTokenizerFast,
     RobertaTokenizerFast
 )
+from pathlib import Path
+import sys
+for _medcoss_repo in Path(__file__).resolve().parents:
+    if (_medcoss_repo / "util" / "torch_load_compat.py").is_file():
+        _sr = str(_medcoss_repo)
+        if _sr not in sys.path:
+            sys.path.insert(0, _sr)
+        break
+else:
+    raise ImportError(
+        "MedCoSS repo root not found above %s (missing util/torch_load_compat.py)" % (__file__,)
+    )
+from util.torch_load_compat import torch_load_compat
 
 class BertPredictionHeadTransform(nn.Module):
     def __init__(self):
@@ -111,7 +124,7 @@ def get_1d_sincos_pos_embed_from_grid(embed_dim, pos):
     out: (M, D)
     """
     assert embed_dim % 2 == 0
-    omega = np.arange(embed_dim // 2, dtype=np.float)
+    omega = np.arange(embed_dim // 2, dtype=np.float64)
     omega /= embed_dim / 2.
     omega = 1. / 10000**omega  # (D/2,)
 
@@ -152,7 +165,7 @@ class Unified_Model(nn.Module):
         if pre_trained:
             print("load parameters from ", pre_trained_weight)
             model_dict = self.state_dict()
-            pre_dict = torch.load(pre_trained_weight, map_location='cpu')["model"]
+            pre_dict = torch_load_compat(pre_trained_weight, map_location='cpu')["model"]
             pre_dict_update = {k: v for k, v in pre_dict.items() if k in model_dict}
 
             pre_dict_no_update = [k for k in pre_dict.keys() if k not in model_dict]

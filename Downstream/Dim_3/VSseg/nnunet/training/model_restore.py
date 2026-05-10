@@ -14,6 +14,19 @@
 
 import nnunet
 import torch
+from pathlib import Path
+import sys
+for _medcoss_repo in Path(__file__).resolve().parents:
+    if (_medcoss_repo / "util" / "torch_load_compat.py").is_file():
+        _sr = str(_medcoss_repo)
+        if _sr not in sys.path:
+            sys.path.insert(0, _sr)
+        break
+else:
+    raise ImportError(
+        "MedCoSS repo root not found above %s (missing util/torch_load_compat.py)" % (__file__,)
+    )
+from util.torch_load_compat import torch_load_compat
 from batchgenerators.utilities.file_and_folder_operations import *
 import importlib
 import pkgutil
@@ -149,7 +162,7 @@ def load_model_and_checkpoint_files(folder, folds=None, mixed_precision=None, ch
     trainer.initialize(False)
     all_best_model_files = [join(i, "%s.model" % checkpoint_name) for i in folds]
     print("using the following model files: ", all_best_model_files)
-    all_params = [torch.load(i, map_location=torch.device('cpu')) for i in all_best_model_files]
+    all_params = [torch_load_compat(i, map_location=torch.device('cpu')) for i in all_best_model_files]
     return trainer, all_params
 
 

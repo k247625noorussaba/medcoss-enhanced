@@ -99,7 +99,8 @@ class TCGA_Image_Dataset_name(data.Dataset):
 
         self.image_path = collect_pathology_image_paths(data_path)
 
-        self.tr_transforms2D = transforms.ToTensor()
+        # Match TCGA_Image_Dataset / buffer training path: same RandomResizedCrop + flip + ToTensor.
+        self.tr_transforms2D = get_train_transform2D(imsize)
 
         if is_sort:
             self.img_ids = sorted(self.image_path)

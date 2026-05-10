@@ -1,6 +1,21 @@
 import argparse
+import json
 import os, sys
 sys.path.append("..")
+from pathlib import Path
+for _medcoss_repo in Path(__file__).resolve().parents:
+    if (_medcoss_repo / "util" / "torch_load_compat.py").is_file():
+        _sr = str(_medcoss_repo)
+        if _sr not in sys.path:
+            sys.path.insert(0, _sr)
+        break
+else:
+    raise ImportError(
+        "MedCoSS repo root not found above %s (missing util/torch_load_compat.py)" % (__file__,)
+    )
+from util.torch_load_compat import torch_load_compat
+# Repo root is on sys.path for util.*; ensure this task's package wins for `model` (seg vs pretrain API).
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 import torch
 import torch.nn as nn
 from torch.utils import data
@@ -416,14 +431,14 @@ def main():
             print('loading from checkpoint: {}'.format(args.checkpoint_path))
             if os.path.exists(args.checkpoint_path):
                 if args.FP16:
-                    checkpoint = torch.load(args.checkpoint_path, map_location=torch.device('cpu'))
+                    checkpoint = torch_load_compat(args.checkpoint_path, map_location=torch.device('cpu'))
                     pre_dict = {k.replace("module.", ""): v for k, v in checkpoint['model'].items()}
                     # pre_dict = checkpoint['model']
                     model.load_state_dict(pre_dict)
                     optimizer.load_state_dict(checkpoint['optimizer'])
                     scaler.load_state_dict(checkpoint['scaler'])
                 else:
-                    checkpoint = torch.load(args.checkpoint_path, map_location=torch.device('cpu'))
+                    checkpoint = torch_load_compat(args.checkpoint_path, map_location=torch.device('cpu'))
                     pre_dict = {k.replace("module.", ""): v for k, v in checkpoint['model'].items()}
                     # pre_dict = checkpoint
                     model.load_state_dict(pre_dict)
@@ -440,6 +455,24 @@ def main():
 
         print('validate ...')
         val_Dice, val_HD = validate(args, input_size, [model], valloader, args.num_classes)
+
+        _dice_per_task = [float(np.mean(val_Dice[t])) for t in range(len(val_Dice)) if len(val_Dice[t]) > 0]
+        _hd_per_task = [float(np.mean(val_HD[t])) for t in range(len(val_HD)) if len(val_HD[t]) > 0]
+        dice_value = float(np.mean(_dice_per_task)) if _dice_per_task else 0.0
+        hd_value = float(np.mean(_hd_per_task)) if _hd_per_task else 0.0
+        os.makedirs(args.save_path, exist_ok=True)
+        metrics_payload = {
+            "task": "GlaS",
+            "split": "test",
+            "dice": dice_value,
+            "hd": hd_value,
+            "snapshot_dir": getattr(args, "snapshot_dir", None),
+            "save_path": args.save_path,
+        }
+        _metrics_path = os.path.join(args.save_path, "metrics.json")
+        with open(_metrics_path, "w") as fp:
+            json.dump(metrics_payload, fp, indent=2)
+        print("Saved metrics to {}".format(_metrics_path))
 
         with open(os.path.join(args.save_path, "result.txt"), 'w') as f:
             for i, (dice, hd) in enumerate(zip(val_Dice, val_HD)):

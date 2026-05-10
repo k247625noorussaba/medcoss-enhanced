@@ -1,0 +1,60 @@
+# =============================================================================
+# MedCoSS — RunPod / production-style stack
+# =============================================================================
+# Base image (do not fight the image pins unless you know you need to):
+#   pytorch/pytorch:1.11.0-cuda11.3-cudnn8-devel
+# That image already includes a matching torch + torchvision + CUDA 11.3 runtime.
+#
+# Install (example):
+#   pip install -r requirements_runpod.txt
+#
+# NVIDIA Apex (NOT on PyPI): build from source against the image torch/CUDA:
+#   https://github.com/NVIDIA/apex
+# Downstream Dim_2 entrypoints import apex at module import time.
+#
+# timm / transformers:
+#   timm==0.4.12 pinned for MedCoSS (timm.optim.optim_factory, DropPath, ViT blocks).
+#   Do not float timm — 1.x changes import paths.
+# =============================================================================
+
+# --- Core numerics / tables ---
+numpy>=1.19.0,<2.0.0
+pandas>=1.1.0
+
+# --- CV / I/O ---
+opencv-python>=4.5.0
+Pillow>=8.0.0
+pydicom>=2.2.0
+nibabel>=3.2.0
+SimpleITK>=2.1.0
+batchgenerators>=0.23
+medpy>=0.4.0
+
+# --- NLP (report SSL + PubMed downstream) ---
+transformers==4.30.2
+nltk>=3.6
+# After pip: python -c "import nltk; nltk.download('punkt')"
+# Optional for some tokenizers: nltk.download('punkt_tab')
+
+# --- ViT / optim helpers (pretrain + unified models) ---
+timm==0.4.12
+einops>=0.4.0
+
+# --- GlaS model (Unetr blocks); keep <1.0 for PyTorch 1.11 in base image ---
+monai>=0.9.1,<1.0.0
+
+# --- ML utilities ---
+scikit-learn>=0.24.0
+scipy>=1.5.0,<1.12.0
+# scipy<1.12: Glas/evaluate.py still references scipy.misc (removed in newer scipy).
+
+# --- Plotting / metrics (dataloaders + some downstream) ---
+matplotlib>=3.3.0
+scikit-image>=0.18.0
+
+# --- Logging ---
+tensorboard>=2.8.0
+tensorboardX>=2.5.0
+tqdm>=4.60.0
+
+# --- sklearn ecosystem already covered; torch metrics via sklearn in downstream ---

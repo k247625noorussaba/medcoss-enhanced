@@ -1,6 +1,8 @@
 import os
 import pickle
 import re
+from pathlib import Path
+
 import numpy as np
 import pandas as pd
 import torch
@@ -24,8 +26,15 @@ class PudMed_20k_Dataset(data.Dataset):
         self.classes = {'BACKGROUND': 0, 'CONCLUSIONS': 1, 'METHODS': 2, 'OBJECTIVE': 3, 'RESULTS': 4}
         self.train_samples = self.prepare_raw_data(os.path.join(data_path, split+".txt"))
 
+        local_tokenizer_path = Path(__file__).resolve().parent.parent / "Bio_ClinicalBERT"
+        if local_tokenizer_path.is_dir():
+            tokenizer_source = str(local_tokenizer_path)
+        else:
+            tokenizer_source = "emilyalsentzer/Bio_ClinicalBERT"
+        print(f"PudMed20k tokenizer: {tokenizer_source}")
         self.tokenizer = BertTokenizer.from_pretrained(
-            "../Bio_ClinicalBERT/")
+            tokenizer_source, do_lower_case=True
+        )
         self.max_words = max_words
 
         print(split, "dataset samples", self.__len__())

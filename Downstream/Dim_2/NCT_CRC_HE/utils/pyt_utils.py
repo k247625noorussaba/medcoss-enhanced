@@ -8,6 +8,19 @@ from collections import OrderedDict, defaultdict
 import torch
 import torch.utils.model_zoo as model_zoo
 import torch.distributed as dist
+from pathlib import Path
+import sys
+for _medcoss_repo in Path(__file__).resolve().parents:
+    if (_medcoss_repo / "util" / "torch_load_compat.py").is_file():
+        _sr = str(_medcoss_repo)
+        if _sr not in sys.path:
+            sys.path.insert(0, _sr)
+        break
+else:
+    raise ImportError(
+        "MedCoSS repo root not found above %s (missing util/torch_load_compat.py)" % (__file__,)
+    )
+from util.torch_load_compat import torch_load_compat
 
 from .logger import get_logger
 
@@ -48,7 +61,7 @@ def load_model(model, model_file, is_restore=False):
     t_start = time.time()
     if isinstance(model_file, str):
         device = torch.device('cpu')
-        state_dict = torch.load(model_file, map_location=device)
+        state_dict = torch_load_compat(model_file, map_location=device)
         if 'model' in state_dict.keys():
             state_dict = state_dict['model']
     else:
