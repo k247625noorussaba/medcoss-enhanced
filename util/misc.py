@@ -12,6 +12,7 @@
 import builtins
 import datetime
 import os
+import re
 import time
 from collections import defaultdict, deque
 from pathlib import Path
@@ -326,6 +327,66 @@ class NativeScalerWithGradNormCount:
         self._scaler.load_state_dict(state_dict)
 
 
+_EPOCH_CHECKPOINT_RE = re.compile(r"^checkpoint-(\d+)\.pth$")
+
+
+def _epoch_index_checkpoints(output_dir: Path) -> dict:
+    """Map epoch index -> path for SSL-style checkpoint-N.pth files only."""
+    found = {}
+    if not output_dir.is_dir():
+        return found
+    for p in output_dir.iterdir():
+        if not p.is_file():
+            continue
+        m = _EPOCH_CHECKPOINT_RE.match(p.name)
+        if m:
+            found[int(m.group(1))] = p
+    return found
+
+
+def _protected_epoch_indices(current_epoch: int, total_epochs: int) -> set:
+    """Epoch indices whose checkpoint-N.pth must be retained (rolling policy)."""
+    last_epoch = total_epochs - 1
+    protected = set()
+    for k in range(max(0, current_epoch - 2), current_epoch + 1):
+        protected.add(k)
+    for m in range(max(0, total_epochs)):
+        if (m + 1) % 50 == 0:
+            protected.add(m)
+    protected.add(last_epoch)
+    return protected
+
+
+def prune_ssl_epoch_checkpoints(output_dir: Path, current_epoch: int, total_epochs: int) -> None:
+    """
+    After saving checkpoint-{current_epoch}.pth, remove older epoch checkpoints that
+    are not protected. Only affects checkpoint-<int>.pth in output_dir (SSL pretrain).
+
+    Retention: latest 3 epochs, every 50th epoch (1-based: epochs 49,99,...), and final
+    checkpoint-(total_epochs-1).pth. Never removes the current epoch file.
+    """
+    if not is_main_process():
+        return
+    if total_epochs <= 0:
+        return
+    output_dir = Path(output_dir)
+    protected = _protected_epoch_indices(current_epoch, total_epochs)
+    by_epoch = _epoch_index_checkpoints(output_dir)
+    deleted = []
+    for epoch_idx, path in sorted(by_epoch.items()):
+        if epoch_idx in protected:
+            continue
+        if epoch_idx == current_epoch:
+            continue
+        try:
+            path.unlink()
+            deleted.append(path.name)
+        except OSError as e:
+            print(f"WARNING: could not delete {path}: {e}", flush=True)
+    if deleted:
+        print(f"Checkpoint retention: deleted {len(deleted)} file(s): {', '.join(deleted)}", flush=True)
+
+
 def get_grad_norm_(parameters, norm_type: float = 2.0) -> torch.Tensor:
     if isinstance(parameters, torch.Tensor):
         parameters = [parameters]
@@ -405,17 +466,18 @@ def save_model_every_epoch(args, epoch, model, model_without_ddp, optimizer, los
     output_dir = Path(args.output_dir)
     epoch_name = str(epoch)
     if loss_scaler is not None:
-        checkpoint_paths = [output_dir / ('checkpoint.pth')]
-        for checkpoint_path in checkpoint_paths:
-            to_save = {
-                'model': model_without_ddp.state_dict(),
-                'optimizer': optimizer.state_dict(),
-                'epoch': epoch,
-                'scaler': loss_scaler.state_dict(),
-                'args': args,
-            }
-
-            save_on_master(to_save, checkpoint_path)
+        checkpoint_path = output_dir / ('checkpoint-%s.pth' % epoch_name)
+        to_save = {
+            'model': model_without_ddp.state_dict(),
+            'optimizer': optimizer.state_dict(),
+            'epoch': epoch,
+            'scaler': loss_scaler.state_dict(),
+            'args': args,
+        }
+        save_on_master(to_save, checkpoint_path)
+        total_epochs = int(getattr(args, 'epochs', 0) or 0)
+        if total_epochs > 0:
+            prune_ssl_epoch_checkpoints(output_dir, int(epoch), total_epochs)
     else:
         client_state = {'epoch': epoch}
         model.save_checkpoint(save_dir=args.output_dir, tag="checkpoint", client_state=client_state)

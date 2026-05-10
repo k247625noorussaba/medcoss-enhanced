@@ -271,8 +271,8 @@ def main(args):
             misc.save_model(
                 args=args, model=model, model_without_ddp=model_without_ddp, optimizer=optimizer,
                 loss_scaler=loss_scaler, epoch=epoch)
-            
-        elif args.output_dir and ((epoch + 1) % 100  == 0):
+            misc.prune_ssl_epoch_checkpoints(Path(args.output_dir), epoch, args.epochs)
+        elif args.output_dir:
             misc.save_model_every_epoch(
                 args=args, model=model, model_without_ddp=model_without_ddp, optimizer=optimizer,
                 loss_scaler=loss_scaler, epoch=epoch)

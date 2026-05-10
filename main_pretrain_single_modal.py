@@ -226,8 +226,13 @@ def main(args):
             log_writer=log_writer,
             args=args
         )
-        if args.output_dir and ((epoch + 1) % 100 == 0 or epoch + 1 == args.epochs):
+        if args.output_dir and (epoch + 1 == args.epochs):
             misc.save_model(
+                args=args, model=model, model_without_ddp=model_without_ddp, optimizer=optimizer,
+                loss_scaler=loss_scaler, epoch=epoch)
+            misc.prune_ssl_epoch_checkpoints(Path(args.output_dir), epoch, args.epochs)
+        elif args.output_dir:
+            misc.save_model_every_epoch(
                 args=args, model=model, model_without_ddp=model_without_ddp, optimizer=optimizer,
                 loss_scaler=loss_scaler, epoch=epoch)
 
