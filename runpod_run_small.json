@@ -1,0 +1,74 @@
+{
+    "dataset_info": {
+        "data_root": "C:\\D\\4th\\Thesis\\data_small",
+        "us_report": {
+            "role": "upstream SSL report modality",
+            "records": 400
+        },
+        "us_xray": {
+            "role": "upstream SSL chest X-ray images",
+            "file_count": 401,
+            "by_extension": { ".png": 400, ".json": 1 },
+            "image_files": 400
+        },
+        "us_pathology": {
+            "role": "upstream SSL pathology (2D) images",
+            "file_count": 401,
+            "by_extension": { ".tif": 400, ".json": 1 },
+            "image_files": 400
+        },
+        "ds_report": {
+            "role": "downstream report classification (e.g. PubMed20k-style)",
+            "splits": {
+                "train": 50,
+                "dev": 20,
+                "test": 20
+            },
+            "total_records": 90
+        },
+        "ds_xray": {
+            "role": "downstream Chest_XR images",
+            "file_count": 210,
+            "by_extension": { ".png": 210 },
+            "folder_distribution": {
+                "train": {
+                    "total_files": 150,
+                    "by_class": { "covid": 50, "normal": 50, "pneumonia": 50 }
+                },
+                "validation": {
+                    "total_files": 60,
+                    "by_class": { "covid": 20, "normal": 20, "pneumonia": 20 }
+                }
+            }
+        },
+        "ds_pathology_cls": {
+            "role": "downstream NCT_CRC_HE / pathology classification images",
+            "file_count": 450,
+            "by_extension": { ".tif": 450 },
+            "folder_distribution": {
+                "by_class_folder": {
+                    "ADI": 50,
+                    "BACK": 50,
+                    "DEB": 50,
+                    "LYM": 50,
+                    "MUC": 50,
+                    "MUS": 50,
+                    "NORM": 50,
+                    "STR": 50,
+                    "TUM": 50
+                },
+                "num_class_folders": 9,
+                "files_per_class_folder": 50
+            }
+        },
+        "ds_pathology_seg": {
+            "role": "downstream GlaS-style pathology segmentation (images on disk)",
+            "file_count": 80,
+            "by_extension": { ".png": 80 },
+            "folder_distribution": {
+                "train": { "images": 20, "labels": 20, "total_files": 40 },
+                "test": { "images": 20, "labels": 20, "total_files": 40 }
+            }
+        }
+    }
+}
