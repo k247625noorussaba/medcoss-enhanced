@@ -1,0 +1,18 @@
+tensorboard==2.14.0
+tensorboard-data-server==0.7.2
+timm==0.4.12
+pandas==2.0.3
+nltk==3.9.1
+transformers==4.30.2
+opencv-python==4.13.0.92
+
+# System dependencies (install with apt, not pip):
+# apt update
+# apt install -y libgl1 libglib2.0-0
+pydicom==2.4.4
+matplotlib==3.7.5
+matplotlib-inline @ file:///tmp/build/80754af9/matplotlib-inline_1628242447089/work
+nibabel==5.2.1
+batchgenerators==0.25.1
+einops==0.8.1
+SimpleITK==2.2.1
