@@ -165,7 +165,7 @@ class MIMIC_CXR_Image_Dataset_name(data.Dataset):
 
         self.image_path = collect_xray_image_paths(data_path)
 
-        self.tr_transforms2D = transforms.ToTensor()
+        self.tr_transforms2D = get_train_transform2D(imsize)
 
         if is_sort:
             self.img_ids = sorted(self.image_path)
