@@ -182,7 +182,10 @@ def main():
 
         if args.FP16:
             print("Note: Using FP16 during training************")
-            model, optimizer = amp.initialize(model, optimizer, opt_level="O1")
+            if amp is not None:
+                model, optimizer = amp.initialize(model, optimizer, opt_level="O1")
+            else:
+                print("WARNING: Apex amp is not installed; skipping amp.initialize. Continuing without Apex O1.")
         if args.FP16:
             print("Using FP16 for training!!!")
             scaler = torch.cuda.amp.GradScaler()
@@ -252,6 +255,7 @@ def main():
 
                 epoch_loss.append(float(reduce_all))
 
+                # todo: undo iter to 500 count when full data run
                 if args.local_rank == 0 and (iter + 1) % 5 == 0:
                     model.eval()
                     model.cal_acc = True

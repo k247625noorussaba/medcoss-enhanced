@@ -186,7 +186,10 @@ def main():
 
         if args.FP16:
             print("Note: Using FP16 during training************")
-            model, optimizer = amp.initialize(model, optimizer, opt_level="O1")
+            if amp is not None:
+                model, optimizer = amp.initialize(model, optimizer, opt_level="O1")
+            else:
+                print("WARNING: Apex amp is not installed; skipping amp.initialize. Native autocast/GradScaler paths still apply when FP16 is True.")
         if args.FP16:
             print("Using FP16 for training!!!")
             scaler = torch.cuda.amp.GradScaler()

@@ -8,8 +8,15 @@ from model.Unimodel import Unified_Model
 import timeit, time
 from utils.ParaFlop import print_model_parm_nums
 from engine import Engine
-from apex import amp
-from apex.parallel import convert_syncbn_model
+try:
+    from apex import amp
+except ImportError:
+    amp = None
+try:
+    from apex.parallel import convert_syncbn_model
+except ImportError:
+    def convert_syncbn_model(module):
+        return module
 from torch.cuda.amp import GradScaler, autocast
 import shutil
 import torch
@@ -182,7 +189,10 @@ def main():
 
         if args.FP16:
             print("Note: Using FP16 during training************")
-            model, optimizer = amp.initialize(model, optimizer, opt_level="O1")
+            if amp is not None:
+                model, optimizer = amp.initialize(model, optimizer, opt_level="O1")
+            else:
+                print("WARNING: Apex amp is not installed; skipping amp.initialize. Native autocast/GradScaler paths still apply when FP16 is True.")
         if args.FP16:
             print("Using FP16 for training!!!")
             scaler = torch.cuda.amp.GradScaler()
