@@ -1,4 +1,5 @@
 import argparse
+import json
 import os, sys
 sys.path.append("..")
 import torch
@@ -440,6 +441,24 @@ def main():
 
         print('validate ...')
         val_Dice, val_HD = validate(args, input_size, [model], valloader, args.num_classes)
+
+        _dice_per_task = [float(np.mean(val_Dice[t])) for t in range(len(val_Dice)) if len(val_Dice[t]) > 0]
+        _hd_per_task = [float(np.mean(val_HD[t])) for t in range(len(val_HD)) if len(val_HD[t]) > 0]
+        dice_value = float(np.mean(_dice_per_task)) if _dice_per_task else 0.0
+        hd_value = float(np.mean(_hd_per_task)) if _hd_per_task else 0.0
+        os.makedirs(args.save_path, exist_ok=True)
+        metrics_payload = {
+            "task": "GlaS",
+            "split": "test",
+            "dice": dice_value,
+            "hd": hd_value,
+            "snapshot_dir": getattr(args, "snapshot_dir", None),
+            "save_path": args.save_path,
+        }
+        _metrics_path = os.path.join(args.save_path, "metrics.json")
+        with open(_metrics_path, "w") as fp:
+            json.dump(metrics_payload, fp, indent=2)
+        print("Saved metrics to {}".format(_metrics_path))
 
         with open(os.path.join(args.save_path, "result.txt"), 'w') as f:
             for i, (dice, hd) in enumerate(zip(val_Dice, val_HD)):

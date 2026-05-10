@@ -1,4 +1,5 @@
 import argparse
+import json
 import os, sys
 import numpy as np
 from dataloader import NCT_CRC_HE_Dataset
@@ -334,6 +335,20 @@ def main():
         test_acc_mean = np.mean(test_acc)
         # test_f1_mean = np.mean(test_f1)
         print("test dataset acc: {}, auc: {}, f1: {}".format(test_acc_mean, val_auc, val_f1))
+        os.makedirs(args.snapshot_dir, exist_ok=True)
+        metrics_payload = {
+            "task": "NCT_CRC_HE",
+            "split": "test",
+            "acc": float(test_acc_mean),
+            "auc": float(val_auc),
+            "f1": float(val_f1),
+            "snapshot_dir": args.snapshot_dir,
+            "pretrained_path": args.pretrained_path if hasattr(args, "pretrained_path") else None,
+        }
+        _metrics_path = osp.join(args.snapshot_dir, "metrics.json")
+        with open(_metrics_path, "w") as fp:
+            json.dump(metrics_payload, fp, indent=2)
+        print("Saved metrics to {}".format(_metrics_path))
         with open(os.path.join(args.snapshot_dir, "result.txt"), "w") as fp:
             fp.write("test dataset acc: {}, auc: {}, f1: {}".format(test_acc_mean, val_auc, val_f1))
         end = timeit.default_timer()
