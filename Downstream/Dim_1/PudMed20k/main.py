@@ -252,7 +252,7 @@ def main():
 
                 epoch_loss.append(float(reduce_all))
 
-                if args.local_rank == 0 and (iter + 1) % 500 == 0:
+                if args.local_rank == 0 and (iter + 1) % 5 == 0:
                     model.eval()
                     model.cal_acc = True
                     pre_score = []
