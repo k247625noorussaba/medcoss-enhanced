@@ -25,7 +25,7 @@ class PudMed_20k_Dataset(data.Dataset):
         self.train_samples = self.prepare_raw_data(os.path.join(data_path, split+".txt"))
 
         self.tokenizer = BertTokenizer.from_pretrained(
-            "../Bio_ClinicalBERT/")
+            "emilyalsentzer/Bio_ClinicalBERT")
         self.max_words = max_words
 
         print(split, "dataset samples", self.__len__())
