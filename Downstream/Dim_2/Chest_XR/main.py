@@ -313,9 +313,23 @@ def main():
                     }
                     torch.save(save_dict, osp.join(args.snapshot_dir, 'checkpoint.pth'))
 
+        checkpoint_path = osp.join(args.snapshot_dir, "checkpoint.pth")
+        if not osp.isfile(checkpoint_path):
+            if args.local_rank == 0:
+                print("WARNING: No best checkpoint was saved during training; saving current model for debug/evaluation continuity.")
+                os.makedirs(args.snapshot_dir, exist_ok=True)
+                save_dict = {
+                    'model': model.state_dict(),
+                    'optimizer': optimizer.state_dict(),
+                    'epoch': args.num_epochs,
+                }
+                torch.save(save_dict, checkpoint_path)
+            if engine.distributed and torch.distributed.is_initialized():
+                torch.distributed.barrier()
+
         model.eval()
-        print("load best weight from", osp.join(args.snapshot_dir, 'checkpoint.pth'))
-        best_performance_weight = torch.load(osp.join(args.snapshot_dir, 'checkpoint.pth'))['model']
+        print("load best weight from", checkpoint_path)
+        best_performance_weight = torch.load(checkpoint_path)['model']
         model.load_state_dict(best_performance_weight, strict=True)
         model.cal_acc = True
         test_acc = []

@@ -360,6 +360,20 @@ def main():
                 if args.local_rank == 0:
                     torch.save(save_dict, osp.join(args.snapshot_dir, 'checkpoint.pth'))
 
+        ckpt_path = osp.join(args.snapshot_dir, "checkpoint.pth")
+        if not osp.isfile(ckpt_path):
+            if args.local_rank == 0:
+                print("WARNING: No best checkpoint was saved during training; saving current model for debug/evaluation continuity.")
+                os.makedirs(args.snapshot_dir, exist_ok=True)
+                save_dict = {
+                    'model': model.state_dict(),
+                    'optimizer': optimizer.state_dict(),
+                    'epoch': args.num_epochs,
+                }
+                torch.save(save_dict, ckpt_path)
+            if engine.distributed and torch.distributed.is_initialized():
+                torch.distributed.barrier()
+
         end = timeit.default_timer()
         print(end - start, 'seconds')
 

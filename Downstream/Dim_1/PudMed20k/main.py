@@ -255,8 +255,7 @@ def main():
 
                 epoch_loss.append(float(reduce_all))
 
-                # todo: undo iter to 500 count when full data run
-                if args.local_rank == 0 and (iter + 1) % 5 == 0:
+                if args.local_rank == 0 and (iter + 1) % 500 == 0:
                     model.eval()
                     model.cal_acc = True
                     pre_score = []
