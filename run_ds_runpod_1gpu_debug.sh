@@ -319,7 +319,7 @@ CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/Glas/train.py \
 
 echo $task_id" Evaluating"
 output_dir='snapshots/downstream/dim_2/'$path_id'prediction/'
-mkdir $output_dir
+mkdir -p $output_dir
 CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/Glas/evaluate.py \
 --arch='unified_vit' \
 --data_dir=$nnudata \
@@ -363,7 +363,7 @@ CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/Glas/train.py \
 
 echo $task_id" Evaluating"
 output_dir='snapshots/downstream/dim_2/'$path_id'prediction/'
-mkdir $output_dir
+mkdir -p $output_dir
 CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/Glas/evaluate.py \
 --arch='unified_vit' \
 --data_dir=$nnudata \
@@ -407,7 +407,7 @@ CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/Glas/train.py \
 
 echo $task_id" Evaluating"
 output_dir='snapshots/downstream/dim_2/'$path_id'prediction/'
-mkdir $output_dir
+mkdir -p $output_dir
 CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/Glas/evaluate.py \
 --arch='unified_vit' \
 --data_dir=$nnudata \
