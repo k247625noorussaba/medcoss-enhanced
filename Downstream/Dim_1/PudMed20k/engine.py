@@ -12,8 +12,8 @@ from utils.pyt_utils import parse_devices, all_reduce_tensor, extant_file
 try:
     from apex.parallel import DistributedDataParallel, SyncBatchNorm
 except ImportError:
-    raise ImportError(
-        "Please install apex from https://www.github.com/nvidia/apex .")
+    from torch.nn.parallel import DistributedDataParallel
+    from torch.nn import SyncBatchNorm
 
 
 logger = get_logger()
