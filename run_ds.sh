@@ -418,3 +418,14 @@ CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/Glas/evaluate.py \
 --random_seed=$seed \
 --weight_std=False \
 --isHD=True 
+
+########################################################################################################################################
+# Refresh run JSON from all metrics.json under snapshots/ (seed_results, averages, raw_metrics).
+# Override default with: RUNPOD_RUN_JSON=runpod_run_small.json bash run_ds.sh
+########################################################################################################################################
+RUNPOD_RUN_JSON="${RUNPOD_RUN_JSON:-runpod_run_full.json}"
+if command -v python >/dev/null 2>&1; then
+  python collect_runpod_metrics.py --run-file "$RUNPOD_RUN_JSON" --snapshot-root snapshots \
+    || echo "WARNING: collect_runpod_metrics.py failed (run JSON not updated)" >&2
+fi
+
