@@ -12,7 +12,7 @@ DS_PATH_SEG="${DATA_ROOT}/ds_pathology_seg"
 
 PRETRAINED_CKPT=/workspace/output_dir/MedCoSS_Report_Xray_Path_buff_0.05_cen_0.01_2D_Path_300/checkpoint-299.pth
 
-gpu_id=1
+gpu_id=0
 
 reload_from_pretrained=True
 pretrained_path="${PRETRAINED_CKPT}"
@@ -281,7 +281,7 @@ CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/NCT_CRC_HE/main.py \
 
 nnudata="${DS_PATH_SEG}"
 
-gpu_id=2
+gpu_id=1
 
 task_id='Glas'
 

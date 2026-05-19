@@ -20,8 +20,8 @@ LOG_ROOT=/workspace/logs
 UNI_PERCEIVER_CKPT="${UNI_PERCEIVER_CKPT:-/workspace/checkpoints/uni-perceiver-base-L12-H768-224size-torch-pretrained.pth}"
 
 # --- Single GPU (sanity pod) ---
-export CUDA_VISIBLE_DEVICES=0
-DIST_LAUNCH="python -m torch.distributed.launch --nproc_per_node=1"
+export CUDA_VISIBLE_DEVICES=0,1
+DIST_LAUNCH="python -m torch.distributed.launch --nproc_per_node=2"
 
 # =============================================================================
 # Stage 1 — Report-only pretraining (single-modal MAE)

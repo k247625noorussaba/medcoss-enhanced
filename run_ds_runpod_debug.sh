@@ -2,7 +2,7 @@
 # =============================================================================
 # MedCoSS downstream fine-tuning — RunPod 1-GPU SANITY / DEBUG only.
 # Copied from run_ds.sh: same 4 tasks and seeds, tiny epochs, distinct snapshots.
-# Does NOT modify run_ds.sh. Pretrained SSL ckpt must match run_ssl_runpod_1gpu_debug.sh.
+# Does NOT modify run_ds.sh. Pretrained SSL ckpt must match run_ssl_runpod_debug.sh.
 # (run_ds.sh has no torch.distributed.launch; there is no nproc_per_node here.)
 # metrics.json is written by Python when present in those entrypoints — unchanged.
 # =============================================================================
