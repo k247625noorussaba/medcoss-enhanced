@@ -5,7 +5,7 @@ echo "== Updating apt =="
 apt update
 
 echo "== Installing system packages =="
-apt install -y libgl1 libglib2.0-0 git curl
+apt install -y libgl1 libglib2.0-0 git curl openssh-server python3-pip rsync tree
 
 echo "== Installing Python requirements =="
 pip install -r requirements_runpod.txt
