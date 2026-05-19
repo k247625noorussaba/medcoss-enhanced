@@ -1,15 +1,13 @@
 #!/usr/bin/env bash
 # =============================================================================
-# MedCoSS downstream fine-tuning — RunPod 1-GPU SANITY / DEBUG only.
+# MedCoSS downstream fine-tuning — RunPod 2-GPU SANITY / DEBUG only.
 # Copied from run_ds.sh: same 4 tasks and seeds, tiny epochs, distinct snapshots.
 # Does NOT modify run_ds.sh. Pretrained SSL ckpt must match run_ssl_runpod_debug.sh.
 # (run_ds.sh has no torch.distributed.launch; there is no nproc_per_node here.)
 # metrics.json is written by Python when present in those entrypoints — unchanged.
 # =============================================================================
 
-set -e
-
-export CUDA_VISIBLE_DEVICES=0
+set -euo pipefail
 
 DATA_ROOT=/workspace/data/processed_small
 DS_REPORT="${DATA_ROOT}/ds_report"
@@ -288,6 +286,8 @@ CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/NCT_CRC_HE/main.py \
 
 nnudata="${DS_PATH_SEG}"
 
+gpu_id=1
+
 task_id='Glas'
 
 lr=0.0001
@@ -426,7 +426,6 @@ CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/Glas/evaluate.py \
 
 ########################################################################################################################################
 # Refresh run JSON from all metrics.json under snapshots/ (seed_results, averages, raw_metrics).
-# Override default with: RUNPOD_RUN_JSON=runpod_run_full.json bash run_ds_runpod_1gpu_debug.sh
 ########################################################################################################################################
 RUNPOD_RUN_JSON="${RUNPOD_RUN_JSON:-runpod_run_small.json}"
 if command -v python >/dev/null 2>&1; then

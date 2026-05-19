@@ -1,10 +1,12 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # =============================================================================
 # MedCoSS downstream fine-tuning (RunPod) — 4 tasks only:
 #   PubMed20k (report) | Chest_XR | NCT_CRC_HE (pathology cls) | GlaS (pathology seg)
 # =============================================================================
 
-DATA_ROOT=/workspace/data/processed
+set -euo pipefail
+
+DATA_ROOT=/workspace/data/processed_small
 DS_REPORT="${DATA_ROOT}/ds_report"
 DS_XRAY="${DATA_ROOT}/ds_xray"
 DS_PATH_CLS="${DATA_ROOT}/ds_pathology_cls"
@@ -37,7 +39,7 @@ meid='_'$exp_name'/seed_'$seed'/lr_'$lr'/'
 path_id=$task_id$meid
 echo $task_id" Training - shallow"
 snapshot_dir='snapshots/downstream/dim_1/'$path_id
-mkdir $snapshot_dir
+mkdir -p $snapshot_dir
 CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_1/PudMed20k/main.py \
 --arch='unified_vit' \
 --data_path=$data_path \
@@ -63,7 +65,7 @@ meid='_'$exp_name'/seed_'$seed'/lr_'$lr'/'
 path_id=$task_id$meid
 echo $task_id" Training - shallow"
 snapshot_dir='snapshots/downstream/dim_1/'$path_id
-mkdir $snapshot_dir
+mkdir -p $snapshot_dir
 CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_1/PudMed20k/main.py \
 --arch='unified_vit' \
 --data_path=$data_path \
@@ -89,7 +91,7 @@ meid='_'$exp_name'/seed_'$seed'/lr_'$lr'/'
 path_id=$task_id$meid
 echo $task_id" Training - shallow"
 snapshot_dir='snapshots/downstream/dim_1/'$path_id
-mkdir $snapshot_dir
+mkdir -p $snapshot_dir
 CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_1/PudMed20k/main.py \
 --arch='unified_vit' \
 --data_path=$data_path \
@@ -125,7 +127,7 @@ meid='_'$exp_name'/seed_'$seed'/lr_'$lr'/'
 path_id=$task_id$meid
 echo $task_id" Training - shallow"
 snapshot_dir='snapshots/downstream/dim_2/'$path_id
-mkdir $snapshot_dir
+mkdir -p $snapshot_dir
 CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/Chest_XR/main.py \
 --arch='unified_vit' \
 --data_path=$data_path \
@@ -149,7 +151,7 @@ meid='_'$exp_name'/seed_'$seed'/lr_'$lr'/'
 path_id=$task_id$meid
 echo $task_id" Training - shallow"
 snapshot_dir='snapshots/downstream/dim_2/'$path_id
-mkdir $snapshot_dir
+mkdir -p $snapshot_dir
 CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/Chest_XR/main.py \
 --arch='unified_vit' \
 --data_path=$data_path \
@@ -174,7 +176,7 @@ meid='_'$exp_name'/seed_'$seed'/lr_'$lr'/'
 path_id=$task_id$meid
 echo $task_id" Training - shallow"
 snapshot_dir='snapshots/downstream/dim_2/'$path_id
-mkdir $snapshot_dir
+mkdir -p $snapshot_dir
 CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/Chest_XR/main.py \
 --arch='unified_vit' \
 --data_path=$data_path \
@@ -209,7 +211,7 @@ meid='_'$exp_name'/seed_'$seed'/lr_'$lr'/'
 path_id=$task_id$meid
 echo $task_id" Training - shallow"
 snapshot_dir='snapshots/downstream/dim_2/'$path_id
-mkdir $snapshot_dir
+mkdir -p $snapshot_dir
 CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/NCT_CRC_HE/main.py \
 --arch='unified_vit' \
 --data_path=$data_path \
@@ -233,7 +235,7 @@ meid='_'$exp_name'/seed_'$seed'/lr_'$lr'/'
 path_id=$task_id$meid
 echo $task_id" Training - shallow"
 snapshot_dir='snapshots/downstream/dim_2/'$path_id
-mkdir $snapshot_dir
+mkdir -p $snapshot_dir
 CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/NCT_CRC_HE/main.py \
 --arch='unified_vit' \
 --data_path=$data_path \
@@ -257,7 +259,7 @@ meid='_'$exp_name'/seed_'$seed'/lr_'$lr'/'
 path_id=$task_id$meid
 echo $task_id" Training - shallow"
 snapshot_dir='snapshots/downstream/dim_2/'$path_id
-mkdir $snapshot_dir
+mkdir -p $snapshot_dir
 CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/NCT_CRC_HE/main.py \
 --arch='unified_vit' \
 --data_path=$data_path \
@@ -293,7 +295,7 @@ meid='_'$exp_name'/seed_'$seed'/lr_'$lr'/'
 path_id=$task_id$meid
 echo $task_id" Training - shallow"
 snapshot_dir='snapshots/downstream/dim_2/'$path_id
-mkdir $snapshot_dir
+mkdir -p $snapshot_dir
 CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/Glas/train.py \
 --arch='unified_vit' \
 --data_dir=$nnudata \
@@ -314,7 +316,7 @@ CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/Glas/train.py \
 
 echo $task_id" Evaluating"
 output_dir='snapshots/downstream/dim_2/'$path_id'prediction/'
-mkdir $output_dir
+mkdir -p $output_dir
 CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/Glas/evaluate.py \
 --arch='unified_vit' \
 --data_dir=$nnudata \
@@ -337,7 +339,7 @@ meid='_'$exp_name'/seed_'$seed'/lr_'$lr'/'
 path_id=$task_id$meid
 echo $task_id" Training - shallow"
 snapshot_dir='snapshots/downstream/dim_2/'$path_id
-mkdir $snapshot_dir
+mkdir -p $snapshot_dir
 CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/Glas/train.py \
 --arch='unified_vit' \
 --data_dir=$nnudata \
@@ -358,7 +360,7 @@ CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/Glas/train.py \
 
 echo $task_id" Evaluating"
 output_dir='snapshots/downstream/dim_2/'$path_id'prediction/'
-mkdir $output_dir
+mkdir -p $output_dir
 CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/Glas/evaluate.py \
 --arch='unified_vit' \
 --data_dir=$nnudata \
@@ -381,7 +383,7 @@ meid='_'$exp_name'/seed_'$seed'/lr_'$lr'/'
 path_id=$task_id$meid
 echo $task_id" Training - shallow"
 snapshot_dir='snapshots/downstream/dim_2/'$path_id
-mkdir $snapshot_dir
+mkdir -p $snapshot_dir
 CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/Glas/train.py \
 --arch='unified_vit' \
 --data_dir=$nnudata \
@@ -402,7 +404,7 @@ CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/Glas/train.py \
 
 echo $task_id" Evaluating"
 output_dir='snapshots/downstream/dim_2/'$path_id'prediction/'
-mkdir $output_dir
+mkdir -p $output_dir
 CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/Glas/evaluate.py \
 --arch='unified_vit' \
 --data_dir=$nnudata \
@@ -421,7 +423,6 @@ CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/Glas/evaluate.py \
 
 ########################################################################################################################################
 # Refresh run JSON from all metrics.json under snapshots/ (seed_results, averages, raw_metrics).
-# Override default with: RUNPOD_RUN_JSON=runpod_run_small.json bash run_ds.sh
 ########################################################################################################################################
 RUNPOD_RUN_JSON="${RUNPOD_RUN_JSON:-runpod_run_full.json}"
 if command -v python >/dev/null 2>&1; then
