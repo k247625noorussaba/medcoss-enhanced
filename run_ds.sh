@@ -11,6 +11,7 @@ DS_REPORT="${DATA_ROOT}/ds_report"
 DS_XRAY="${DATA_ROOT}/ds_xray"
 DS_PATH_CLS="${DATA_ROOT}/ds_pathology_cls"
 DS_PATH_SEG="${DATA_ROOT}/ds_pathology_seg"
+SNAPSHOT_ROOT=/workspace/snapshots
 
 PRETRAINED_CKPT=/workspace/output_dir/MedCoSS_Report_Xray_Path_buff_0.05_cen_0.01_2D_Path_300/checkpoint-299.pth
 
@@ -38,7 +39,7 @@ meid='_'$exp_name'/seed_'$seed'/lr_'$lr'/'
 
 path_id=$task_id$meid
 echo $task_id" Training - shallow"
-snapshot_dir='snapshots/downstream/dim_1/'$path_id
+snapshot_dir="${SNAPSHOT_ROOT}/downstream/dim_1${path_id}"
 mkdir -p $snapshot_dir
 CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_1/PudMed20k/main.py \
 --arch='unified_vit' \
@@ -64,7 +65,7 @@ meid='_'$exp_name'/seed_'$seed'/lr_'$lr'/'
 
 path_id=$task_id$meid
 echo $task_id" Training - shallow"
-snapshot_dir='snapshots/downstream/dim_1/'$path_id
+snapshot_dir="${SNAPSHOT_ROOT}/downstream/dim_1${path_id}"
 mkdir -p $snapshot_dir
 CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_1/PudMed20k/main.py \
 --arch='unified_vit' \
@@ -90,7 +91,7 @@ meid='_'$exp_name'/seed_'$seed'/lr_'$lr'/'
 
 path_id=$task_id$meid
 echo $task_id" Training - shallow"
-snapshot_dir='snapshots/downstream/dim_1/'$path_id
+snapshot_dir="${SNAPSHOT_ROOT}/downstream/dim_1${path_id}"
 mkdir -p $snapshot_dir
 CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_1/PudMed20k/main.py \
 --arch='unified_vit' \
@@ -126,7 +127,7 @@ meid='_'$exp_name'/seed_'$seed'/lr_'$lr'/'
 
 path_id=$task_id$meid
 echo $task_id" Training - shallow"
-snapshot_dir='snapshots/downstream/dim_2/'$path_id
+snapshot_dir="${SNAPSHOT_ROOT}/downstream/dim_2${path_id}"
 mkdir -p $snapshot_dir
 CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/Chest_XR/main.py \
 --arch='unified_vit' \
@@ -150,7 +151,7 @@ meid='_'$exp_name'/seed_'$seed'/lr_'$lr'/'
 
 path_id=$task_id$meid
 echo $task_id" Training - shallow"
-snapshot_dir='snapshots/downstream/dim_2/'$path_id
+snapshot_dir="${SNAPSHOT_ROOT}/downstream/dim_2${path_id}"
 mkdir -p $snapshot_dir
 CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/Chest_XR/main.py \
 --arch='unified_vit' \
@@ -175,7 +176,7 @@ meid='_'$exp_name'/seed_'$seed'/lr_'$lr'/'
 
 path_id=$task_id$meid
 echo $task_id" Training - shallow"
-snapshot_dir='snapshots/downstream/dim_2/'$path_id
+snapshot_dir="${SNAPSHOT_ROOT}/downstream/dim_2${path_id}"
 mkdir -p $snapshot_dir
 CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/Chest_XR/main.py \
 --arch='unified_vit' \
@@ -210,7 +211,7 @@ meid='_'$exp_name'/seed_'$seed'/lr_'$lr'/'
 
 path_id=$task_id$meid
 echo $task_id" Training - shallow"
-snapshot_dir='snapshots/downstream/dim_2/'$path_id
+snapshot_dir="${SNAPSHOT_ROOT}/downstream/dim_2${path_id}"
 mkdir -p $snapshot_dir
 CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/NCT_CRC_HE/main.py \
 --arch='unified_vit' \
@@ -234,7 +235,7 @@ meid='_'$exp_name'/seed_'$seed'/lr_'$lr'/'
 
 path_id=$task_id$meid
 echo $task_id" Training - shallow"
-snapshot_dir='snapshots/downstream/dim_2/'$path_id
+snapshot_dir="${SNAPSHOT_ROOT}/downstream/dim_2${path_id}"
 mkdir -p $snapshot_dir
 CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/NCT_CRC_HE/main.py \
 --arch='unified_vit' \
@@ -258,7 +259,7 @@ meid='_'$exp_name'/seed_'$seed'/lr_'$lr'/'
 
 path_id=$task_id$meid
 echo $task_id" Training - shallow"
-snapshot_dir='snapshots/downstream/dim_2/'$path_id
+snapshot_dir="${SNAPSHOT_ROOT}/downstream/dim_2${path_id}"
 mkdir -p $snapshot_dir
 CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/NCT_CRC_HE/main.py \
 --arch='unified_vit' \
@@ -294,7 +295,7 @@ seed=0
 meid='_'$exp_name'/seed_'$seed'/lr_'$lr'/'
 path_id=$task_id$meid
 echo $task_id" Training - shallow"
-snapshot_dir='snapshots/downstream/dim_2/'$path_id
+snapshot_dir="${SNAPSHOT_ROOT}/downstream/dim_2${path_id}"
 mkdir -p $snapshot_dir
 CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/Glas/train.py \
 --arch='unified_vit' \
@@ -315,14 +316,14 @@ CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/Glas/train.py \
 --pretrained_path=$pretrained_path 
 
 echo $task_id" Evaluating"
-output_dir='snapshots/downstream/dim_2/'$path_id'prediction/'
+output_dir="${SNAPSHOT_ROOT}/downstream/dim_2/${path_id}/prediction/"
 mkdir -p $output_dir
 CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/Glas/evaluate.py \
 --arch='unified_vit' \
 --data_dir=$nnudata \
 --nnUNet_preprocessed=$nnudata \
 --reload_from_checkpoint=True \
---checkpoint_path=$snapshot_dir'checkpoint.pth' \
+--checkpoint_path="${snapshot_dir}/checkpoint.pth" \
 --save_path=$output_dir \
 --input_size='512,512' \
 --batch_size=1 \
@@ -338,7 +339,7 @@ seed=10
 meid='_'$exp_name'/seed_'$seed'/lr_'$lr'/'
 path_id=$task_id$meid
 echo $task_id" Training - shallow"
-snapshot_dir='snapshots/downstream/dim_2/'$path_id
+snapshot_dir="${SNAPSHOT_ROOT}/downstream/dim_2${path_id}"
 mkdir -p $snapshot_dir
 CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/Glas/train.py \
 --arch='unified_vit' \
@@ -359,14 +360,14 @@ CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/Glas/train.py \
 --pretrained_path=$pretrained_path
 
 echo $task_id" Evaluating"
-output_dir='snapshots/downstream/dim_2/'$path_id'prediction/'
+output_dir="${SNAPSHOT_ROOT}/downstream/dim_2/${path_id}/prediction/"
 mkdir -p $output_dir
 CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/Glas/evaluate.py \
 --arch='unified_vit' \
 --data_dir=$nnudata \
 --nnUNet_preprocessed=$nnudata \
 --reload_from_checkpoint=True \
---checkpoint_path=$snapshot_dir'checkpoint.pth' \
+--checkpoint_path="${snapshot_dir}/checkpoint.pth" \
 --save_path=$output_dir \
 --input_size='512,512' \
 --batch_size=1 \
@@ -382,7 +383,7 @@ seed=100
 meid='_'$exp_name'/seed_'$seed'/lr_'$lr'/'
 path_id=$task_id$meid
 echo $task_id" Training - shallow"
-snapshot_dir='snapshots/downstream/dim_2/'$path_id
+snapshot_dir="${SNAPSHOT_ROOT}/downstream/dim_2${path_id}"
 mkdir -p $snapshot_dir
 CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/Glas/train.py \
 --arch='unified_vit' \
@@ -403,14 +404,14 @@ CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/Glas/train.py \
 --pretrained_path=$pretrained_path
 
 echo $task_id" Evaluating"
-output_dir='snapshots/downstream/dim_2/'$path_id'prediction/'
+output_dir="${SNAPSHOT_ROOT}/downstream/dim_2/${path_id}/prediction/"
 mkdir -p $output_dir
 CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/Glas/evaluate.py \
 --arch='unified_vit' \
 --data_dir=$nnudata \
 --nnUNet_preprocessed=$nnudata \
 --reload_from_checkpoint=True \
---checkpoint_path=$snapshot_dir'checkpoint.pth' \
+--checkpoint_path="${snapshot_dir}/checkpoint.pth" \
 --save_path=$output_dir \
 --input_size='512,512' \
 --batch_size=1 \
@@ -426,7 +427,7 @@ CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/Glas/evaluate.py \
 ########################################################################################################################################
 RUNPOD_RUN_JSON="${RUNPOD_RUN_JSON:-runpod_run_full.json}"
 if command -v python >/dev/null 2>&1; then
-  python collect_runpod_metrics.py --run-file "$RUNPOD_RUN_JSON" --snapshot-root snapshots \
+  python collect_runpod_metrics.py --run-file "$RUNPOD_RUN_JSON" --snapshot-root "$SNAPSHOT_ROOT" \
     || echo "WARNING: collect_runpod_metrics.py failed (run JSON not updated)" >&2
 fi
 
