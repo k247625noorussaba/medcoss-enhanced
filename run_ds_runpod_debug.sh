@@ -11,19 +11,19 @@ set -e
 
 export CUDA_VISIBLE_DEVICES=0
 
-DATA_ROOT=/workspace/data/processed
+DATA_ROOT=/workspace/data/processed_small
 DS_REPORT="${DATA_ROOT}/ds_report"
 DS_XRAY="${DATA_ROOT}/ds_xray"
 DS_PATH_CLS="${DATA_ROOT}/ds_pathology_cls"
 DS_PATH_SEG="${DATA_ROOT}/ds_pathology_seg"
 
-PRETRAINED_CKPT=/workspace/output_dir/MedCoSS_Report_Xray_Path_RUNPOD_1GPU_DEBUG_2D_Path_1/checkpoint-0.pth
+PRETRAINED_CKPT=/workspace/output_dir/MedCoSS_Report_Xray_Path_RUNPOD_2GPU_DEBUG_2D_Path_1/checkpoint-0.pth
 
 gpu_id=0
 
 reload_from_pretrained=True
 pretrained_path="${PRETRAINED_CKPT}"
-exp_name='MedCoSS_Report_Xray_Path_buff_0.05_RUNPOD_1GPU_DEBUG'
+exp_name='MedCoSS_Report_Xray_Path_buff_0.05_RUNPOD_2GPU_DEBUG'
 
 
 ########################################################################################################################################
