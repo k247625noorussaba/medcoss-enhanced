@@ -106,19 +106,19 @@
                     {
                         "seed": 0,
                         "acc": 0.3403361344537815,
-                        "auc": 0.6769289728369776,
+                        "auc": 0.6678749533797324,
                         "f1": 0.10156739811912226
                     },
                     {
                         "seed": 10,
                         "acc": 0.35294117647058826,
-                        "auc": 0.644715352976006,
+                        "auc": 0.6289567042578791,
                         "f1": 0.10434782608695652
                     },
                     {
                         "seed": 100,
                         "acc": 0.35294117647058826,
-                        "auc": 0.5708449172845828,
+                        "auc": 0.6600237526312795,
                         "f1": 0.10434782608695652
                     }
                 ],
@@ -129,8 +129,8 @@
                         "n": 3
                     },
                     "auc": {
-                        "mean": 0.6308297476991888,
-                        "std": 0.054388089100818576,
+                        "mean": 0.652285136756297,
+                        "std": 0.020580868796604705,
                         "n": 3
                     },
                     "f1": {
@@ -147,19 +147,19 @@
                     {
                         "seed": 0,
                         "acc": 0.3333333333333333,
-                        "auc": 0.38291666666666674,
+                        "auc": 0.4291666666666667,
                         "f1": 0.16666666666666666
                     },
                     {
                         "seed": 10,
                         "acc": 0.3333333333333333,
-                        "auc": 0.72125,
+                        "auc": 0.7095833333333333,
                         "f1": 0.16666666666666666
                     },
                     {
                         "seed": 100,
                         "acc": 0.3333333333333333,
-                        "auc": 0.46249999999999997,
+                        "auc": 0.38791666666666663,
                         "f1": 0.16666666666666666
                     }
                 ],
@@ -170,8 +170,8 @@
                         "n": 3
                     },
                     "auc": {
-                        "mean": 0.5222222222222223,
-                        "std": 0.17689663360697813,
+                        "mean": 0.508888888888889,
+                        "std": 0.1750259570696534,
                         "n": 3
                     },
                     "f1": {
@@ -188,19 +188,19 @@
                     {
                         "seed": 0,
                         "acc": 0.1111111111111111,
-                        "auc": 0.6965277777777779,
+                        "auc": 0.6484722222222221,
                         "f1": 0.02222222222222222
                     },
                     {
                         "seed": 10,
                         "acc": 0.1111111111111111,
-                        "auc": 0.5047222222222223,
+                        "auc": 0.5591666666666666,
                         "f1": 0.02222222222222222
                     },
                     {
                         "seed": 100,
                         "acc": 0.1111111111111111,
-                        "auc": 0.4783333333333334,
+                        "auc": 0.6694444444444445,
                         "f1": 0.02222222222222222
                     }
                 ],
@@ -211,8 +211,8 @@
                         "n": 3
                     },
                     "auc": {
-                        "mean": 0.5598611111111111,
-                        "std": 0.11908999411172572,
+                        "mean": 0.6256944444444444,
+                        "std": 0.05856122811444113,
                         "n": 3
                     },
                     "f1": {
@@ -228,29 +228,29 @@
                 "seeds": [
                     {
                         "seed": 0,
-                        "dice": 0.7619303597005335,
-                        "hd": 69.59680517449206
+                        "dice": 0.6863510464765618,
+                        "hd": 66.60331098451194
                     },
                     {
                         "seed": 10,
-                        "dice": 0.7656971959352346,
-                        "hd": 68.94920609704566
+                        "dice": 0.7402548823046269,
+                        "hd": 77.39638625545317
                     },
                     {
                         "seed": 100,
-                        "dice": 0.7292035649422146,
-                        "hd": 67.9954679354745
+                        "dice": 0.7248765467879379,
+                        "hd": 67.01077511402075
                     }
                 ],
                 "average": {
                     "dice": {
-                        "mean": 0.7522770401926608,
-                        "std": 0.02007077997748173,
+                        "mean": 0.7171608251897088,
+                        "std": 0.027767879808886797,
                         "n": 3
                     },
                     "hd": {
-                        "mean": 68.84715973567074,
-                        "std": 0.8055310876486999,
+                        "mean": 70.33682411799528,
+                        "std": 6.117153744486139,
                         "n": 3
                     }
                 }
@@ -265,8 +265,8 @@
                 "n": 3
             },
             "auc": {
-                "mean": 0.6308297476991888,
-                "std": 0.054388089100818576,
+                "mean": 0.652285136756297,
+                "std": 0.020580868796604705,
                 "n": 3
             },
             "f1": {
@@ -282,8 +282,8 @@
                 "n": 3
             },
             "auc": {
-                "mean": 0.5222222222222223,
-                "std": 0.17689663360697813,
+                "mean": 0.508888888888889,
+                "std": 0.1750259570696534,
                 "n": 3
             },
             "f1": {
@@ -299,8 +299,8 @@
                 "n": 3
             },
             "auc": {
-                "mean": 0.5598611111111111,
-                "std": 0.11908999411172572,
+                "mean": 0.6256944444444444,
+                "std": 0.05856122811444113,
                 "n": 3
             },
             "f1": {
@@ -311,13 +311,13 @@
         },
         "GlaS": {
             "dice": {
-                "mean": 0.7522770401926608,
-                "std": 0.02007077997748173,
+                "mean": 0.7171608251897088,
+                "std": 0.027767879808886797,
                 "n": 3
             },
             "hd": {
-                "mean": 68.84715973567074,
-                "std": 0.8055310876486999,
+                "mean": 70.33682411799528,
+                "std": 6.117153744486139,
                 "n": 3
             }
         }
@@ -327,129 +327,129 @@
             "task": "PudMed20k",
             "split": "test",
             "acc": 0.3403361344537815,
-            "auc": 0.6769289728369776,
+            "auc": 0.6678749533797324,
             "f1": 0.10156739811912226,
-            "snapshot_dir": "snapshots/downstream/dim_1/1D_PubMed_MedCoSS_Report_Xray_Path_buff_0.05_RUNPOD_1GPU_DEBUG/seed_0/lr_0.0002/",
-            "pretrained_path": "/workspace/output_dir/MedCoSS_Report_Xray_Path_RUNPOD_1GPU_DEBUG_2D_Path_1/checkpoint-0.pth",
-            "_metrics_file": "/workspace/MedCoSS/snapshots/downstream/dim_1/1D_PubMed_MedCoSS_Report_Xray_Path_buff_0.05_RUNPOD_1GPU_DEBUG/seed_0/lr_0.0002/metrics.json",
+            "snapshot_dir": "/tmp/snapshots/downstream/dim_1/1D_PubMed_MedCoSS_Report_Xray_Path_buff_0.05_RUNPOD_2GPU_DEBUG/seed_0/lr_0.0002/",
+            "pretrained_path": "/tmp/output_dir/MedCoSS_Report_Xray_Path_RUNPOD_2GPU_DEBUG_2D_Path_1/checkpoint-0.pth",
+            "_metrics_file": "/tmp/snapshots/downstream/dim_1/1D_PubMed_MedCoSS_Report_Xray_Path_buff_0.05_RUNPOD_2GPU_DEBUG/seed_0/lr_0.0002/metrics.json",
             "_seed": 0
         },
         {
             "task": "PudMed20k",
             "split": "test",
             "acc": 0.35294117647058826,
-            "auc": 0.644715352976006,
+            "auc": 0.6289567042578791,
             "f1": 0.10434782608695652,
-            "snapshot_dir": "snapshots/downstream/dim_1/1D_PubMed_MedCoSS_Report_Xray_Path_buff_0.05_RUNPOD_1GPU_DEBUG/seed_10/lr_0.0002/",
-            "pretrained_path": "/workspace/output_dir/MedCoSS_Report_Xray_Path_RUNPOD_1GPU_DEBUG_2D_Path_1/checkpoint-0.pth",
-            "_metrics_file": "/workspace/MedCoSS/snapshots/downstream/dim_1/1D_PubMed_MedCoSS_Report_Xray_Path_buff_0.05_RUNPOD_1GPU_DEBUG/seed_10/lr_0.0002/metrics.json",
+            "snapshot_dir": "/tmp/snapshots/downstream/dim_1/1D_PubMed_MedCoSS_Report_Xray_Path_buff_0.05_RUNPOD_2GPU_DEBUG/seed_10/lr_0.0002/",
+            "pretrained_path": "/tmp/output_dir/MedCoSS_Report_Xray_Path_RUNPOD_2GPU_DEBUG_2D_Path_1/checkpoint-0.pth",
+            "_metrics_file": "/tmp/snapshots/downstream/dim_1/1D_PubMed_MedCoSS_Report_Xray_Path_buff_0.05_RUNPOD_2GPU_DEBUG/seed_10/lr_0.0002/metrics.json",
             "_seed": 10
         },
         {
             "task": "PudMed20k",
             "split": "test",
             "acc": 0.35294117647058826,
-            "auc": 0.5708449172845828,
+            "auc": 0.6600237526312795,
             "f1": 0.10434782608695652,
-            "snapshot_dir": "snapshots/downstream/dim_1/1D_PubMed_MedCoSS_Report_Xray_Path_buff_0.05_RUNPOD_1GPU_DEBUG/seed_100/lr_0.0002/",
-            "pretrained_path": "/workspace/output_dir/MedCoSS_Report_Xray_Path_RUNPOD_1GPU_DEBUG_2D_Path_1/checkpoint-0.pth",
-            "_metrics_file": "/workspace/MedCoSS/snapshots/downstream/dim_1/1D_PubMed_MedCoSS_Report_Xray_Path_buff_0.05_RUNPOD_1GPU_DEBUG/seed_100/lr_0.0002/metrics.json",
+            "snapshot_dir": "/tmp/snapshots/downstream/dim_1/1D_PubMed_MedCoSS_Report_Xray_Path_buff_0.05_RUNPOD_2GPU_DEBUG/seed_100/lr_0.0002/",
+            "pretrained_path": "/tmp/output_dir/MedCoSS_Report_Xray_Path_RUNPOD_2GPU_DEBUG_2D_Path_1/checkpoint-0.pth",
+            "_metrics_file": "/tmp/snapshots/downstream/dim_1/1D_PubMed_MedCoSS_Report_Xray_Path_buff_0.05_RUNPOD_2GPU_DEBUG/seed_100/lr_0.0002/metrics.json",
             "_seed": 100
         },
         {
             "task": "Chest_XR",
             "split": "test",
             "acc": 0.3333333333333333,
-            "auc": 0.38291666666666674,
+            "auc": 0.4291666666666667,
             "f1": 0.16666666666666666,
-            "snapshot_dir": "snapshots/downstream/dim_2/2D_ChestXR_MedCoSS_Report_Xray_Path_buff_0.05_RUNPOD_1GPU_DEBUG/seed_0/lr_0.00005/",
-            "pretrained_path": "/workspace/output_dir/MedCoSS_Report_Xray_Path_RUNPOD_1GPU_DEBUG_2D_Path_1/checkpoint-0.pth",
-            "_metrics_file": "/workspace/MedCoSS/snapshots/downstream/dim_2/2D_ChestXR_MedCoSS_Report_Xray_Path_buff_0.05_RUNPOD_1GPU_DEBUG/seed_0/lr_0.00005/metrics.json",
+            "snapshot_dir": "/tmp/snapshots/downstream/dim_2/2D_ChestXR_MedCoSS_Report_Xray_Path_buff_0.05_RUNPOD_2GPU_DEBUG/seed_0/lr_0.00005/",
+            "pretrained_path": "/tmp/output_dir/MedCoSS_Report_Xray_Path_RUNPOD_2GPU_DEBUG_2D_Path_1/checkpoint-0.pth",
+            "_metrics_file": "/tmp/snapshots/downstream/dim_2/2D_ChestXR_MedCoSS_Report_Xray_Path_buff_0.05_RUNPOD_2GPU_DEBUG/seed_0/lr_0.00005/metrics.json",
             "_seed": 0
         },
         {
             "task": "Chest_XR",
             "split": "test",
             "acc": 0.3333333333333333,
-            "auc": 0.72125,
+            "auc": 0.7095833333333333,
             "f1": 0.16666666666666666,
-            "snapshot_dir": "snapshots/downstream/dim_2/2D_ChestXR_MedCoSS_Report_Xray_Path_buff_0.05_RUNPOD_1GPU_DEBUG/seed_10/lr_0.00005/",
-            "pretrained_path": "/workspace/output_dir/MedCoSS_Report_Xray_Path_RUNPOD_1GPU_DEBUG_2D_Path_1/checkpoint-0.pth",
-            "_metrics_file": "/workspace/MedCoSS/snapshots/downstream/dim_2/2D_ChestXR_MedCoSS_Report_Xray_Path_buff_0.05_RUNPOD_1GPU_DEBUG/seed_10/lr_0.00005/metrics.json",
+            "snapshot_dir": "/tmp/snapshots/downstream/dim_2/2D_ChestXR_MedCoSS_Report_Xray_Path_buff_0.05_RUNPOD_2GPU_DEBUG/seed_10/lr_0.00005/",
+            "pretrained_path": "/tmp/output_dir/MedCoSS_Report_Xray_Path_RUNPOD_2GPU_DEBUG_2D_Path_1/checkpoint-0.pth",
+            "_metrics_file": "/tmp/snapshots/downstream/dim_2/2D_ChestXR_MedCoSS_Report_Xray_Path_buff_0.05_RUNPOD_2GPU_DEBUG/seed_10/lr_0.00005/metrics.json",
             "_seed": 10
         },
         {
             "task": "Chest_XR",
             "split": "test",
             "acc": 0.3333333333333333,
-            "auc": 0.46249999999999997,
+            "auc": 0.38791666666666663,
             "f1": 0.16666666666666666,
-            "snapshot_dir": "snapshots/downstream/dim_2/2D_ChestXR_MedCoSS_Report_Xray_Path_buff_0.05_RUNPOD_1GPU_DEBUG/seed_100/lr_0.00005/",
-            "pretrained_path": "/workspace/output_dir/MedCoSS_Report_Xray_Path_RUNPOD_1GPU_DEBUG_2D_Path_1/checkpoint-0.pth",
-            "_metrics_file": "/workspace/MedCoSS/snapshots/downstream/dim_2/2D_ChestXR_MedCoSS_Report_Xray_Path_buff_0.05_RUNPOD_1GPU_DEBUG/seed_100/lr_0.00005/metrics.json",
+            "snapshot_dir": "/tmp/snapshots/downstream/dim_2/2D_ChestXR_MedCoSS_Report_Xray_Path_buff_0.05_RUNPOD_2GPU_DEBUG/seed_100/lr_0.00005/",
+            "pretrained_path": "/tmp/output_dir/MedCoSS_Report_Xray_Path_RUNPOD_2GPU_DEBUG_2D_Path_1/checkpoint-0.pth",
+            "_metrics_file": "/tmp/snapshots/downstream/dim_2/2D_ChestXR_MedCoSS_Report_Xray_Path_buff_0.05_RUNPOD_2GPU_DEBUG/seed_100/lr_0.00005/metrics.json",
             "_seed": 100
         },
         {
             "task": "NCT_CRC_HE",
             "split": "test",
             "acc": 0.1111111111111111,
-            "auc": 0.6965277777777779,
+            "auc": 0.6484722222222221,
             "f1": 0.02222222222222222,
-            "snapshot_dir": "snapshots/downstream/dim_2/2D_NCT_CRC_HE_MedCoSS_Report_Xray_Path_buff_0.05_RUNPOD_1GPU_DEBUG/seed_0/lr_0.0001/",
-            "pretrained_path": "/workspace/output_dir/MedCoSS_Report_Xray_Path_RUNPOD_1GPU_DEBUG_2D_Path_1/checkpoint-0.pth",
-            "_metrics_file": "/workspace/MedCoSS/snapshots/downstream/dim_2/2D_NCT_CRC_HE_MedCoSS_Report_Xray_Path_buff_0.05_RUNPOD_1GPU_DEBUG/seed_0/lr_0.0001/metrics.json",
+            "snapshot_dir": "/tmp/snapshots/downstream/dim_2/2D_NCT_CRC_HE_MedCoSS_Report_Xray_Path_buff_0.05_RUNPOD_2GPU_DEBUG/seed_0/lr_0.0001/",
+            "pretrained_path": "/tmp/output_dir/MedCoSS_Report_Xray_Path_RUNPOD_2GPU_DEBUG_2D_Path_1/checkpoint-0.pth",
+            "_metrics_file": "/tmp/snapshots/downstream/dim_2/2D_NCT_CRC_HE_MedCoSS_Report_Xray_Path_buff_0.05_RUNPOD_2GPU_DEBUG/seed_0/lr_0.0001/metrics.json",
             "_seed": 0
         },
         {
             "task": "NCT_CRC_HE",
             "split": "test",
             "acc": 0.1111111111111111,
-            "auc": 0.5047222222222223,
+            "auc": 0.5591666666666666,
             "f1": 0.02222222222222222,
-            "snapshot_dir": "snapshots/downstream/dim_2/2D_NCT_CRC_HE_MedCoSS_Report_Xray_Path_buff_0.05_RUNPOD_1GPU_DEBUG/seed_10/lr_0.0001/",
-            "pretrained_path": "/workspace/output_dir/MedCoSS_Report_Xray_Path_RUNPOD_1GPU_DEBUG_2D_Path_1/checkpoint-0.pth",
-            "_metrics_file": "/workspace/MedCoSS/snapshots/downstream/dim_2/2D_NCT_CRC_HE_MedCoSS_Report_Xray_Path_buff_0.05_RUNPOD_1GPU_DEBUG/seed_10/lr_0.0001/metrics.json",
+            "snapshot_dir": "/tmp/snapshots/downstream/dim_2/2D_NCT_CRC_HE_MedCoSS_Report_Xray_Path_buff_0.05_RUNPOD_2GPU_DEBUG/seed_10/lr_0.0001/",
+            "pretrained_path": "/tmp/output_dir/MedCoSS_Report_Xray_Path_RUNPOD_2GPU_DEBUG_2D_Path_1/checkpoint-0.pth",
+            "_metrics_file": "/tmp/snapshots/downstream/dim_2/2D_NCT_CRC_HE_MedCoSS_Report_Xray_Path_buff_0.05_RUNPOD_2GPU_DEBUG/seed_10/lr_0.0001/metrics.json",
             "_seed": 10
         },
         {
             "task": "NCT_CRC_HE",
             "split": "test",
             "acc": 0.1111111111111111,
-            "auc": 0.4783333333333334,
+            "auc": 0.6694444444444445,
             "f1": 0.02222222222222222,
-            "snapshot_dir": "snapshots/downstream/dim_2/2D_NCT_CRC_HE_MedCoSS_Report_Xray_Path_buff_0.05_RUNPOD_1GPU_DEBUG/seed_100/lr_0.0001/",
-            "pretrained_path": "/workspace/output_dir/MedCoSS_Report_Xray_Path_RUNPOD_1GPU_DEBUG_2D_Path_1/checkpoint-0.pth",
-            "_metrics_file": "/workspace/MedCoSS/snapshots/downstream/dim_2/2D_NCT_CRC_HE_MedCoSS_Report_Xray_Path_buff_0.05_RUNPOD_1GPU_DEBUG/seed_100/lr_0.0001/metrics.json",
+            "snapshot_dir": "/tmp/snapshots/downstream/dim_2/2D_NCT_CRC_HE_MedCoSS_Report_Xray_Path_buff_0.05_RUNPOD_2GPU_DEBUG/seed_100/lr_0.0001/",
+            "pretrained_path": "/tmp/output_dir/MedCoSS_Report_Xray_Path_RUNPOD_2GPU_DEBUG_2D_Path_1/checkpoint-0.pth",
+            "_metrics_file": "/tmp/snapshots/downstream/dim_2/2D_NCT_CRC_HE_MedCoSS_Report_Xray_Path_buff_0.05_RUNPOD_2GPU_DEBUG/seed_100/lr_0.0001/metrics.json",
             "_seed": 100
         },
         {
             "task": "GlaS",
             "split": "test",
-            "dice": 0.7619303597005335,
-            "hd": 69.59680517449206,
+            "dice": 0.6863510464765618,
+            "hd": 66.60331098451194,
             "snapshot_dir": null,
-            "save_path": "snapshots/downstream/dim_2/Glas_MedCoSS_Report_Xray_Path_buff_0.05_RUNPOD_1GPU_DEBUG/seed_0/lr_0.0001/prediction/",
-            "_metrics_file": "/workspace/MedCoSS/snapshots/downstream/dim_2/Glas_MedCoSS_Report_Xray_Path_buff_0.05_RUNPOD_1GPU_DEBUG/seed_0/lr_0.0001/prediction/metrics.json",
+            "save_path": "/tmp/snapshots/downstream/dim_2/Glas_MedCoSS_Report_Xray_Path_buff_0.05_RUNPOD_2GPU_DEBUG/seed_0/lr_0.0001//prediction/",
+            "_metrics_file": "/tmp/snapshots/downstream/dim_2/Glas_MedCoSS_Report_Xray_Path_buff_0.05_RUNPOD_2GPU_DEBUG/seed_0/lr_0.0001/prediction/metrics.json",
             "_seed": 0
         },
         {
             "task": "GlaS",
             "split": "test",
-            "dice": 0.7656971959352346,
-            "hd": 68.94920609704566,
+            "dice": 0.7402548823046269,
+            "hd": 77.39638625545317,
             "snapshot_dir": null,
-            "save_path": "snapshots/downstream/dim_2/Glas_MedCoSS_Report_Xray_Path_buff_0.05_RUNPOD_1GPU_DEBUG/seed_10/lr_0.0001/prediction/",
-            "_metrics_file": "/workspace/MedCoSS/snapshots/downstream/dim_2/Glas_MedCoSS_Report_Xray_Path_buff_0.05_RUNPOD_1GPU_DEBUG/seed_10/lr_0.0001/prediction/metrics.json",
+            "save_path": "/tmp/snapshots/downstream/dim_2/Glas_MedCoSS_Report_Xray_Path_buff_0.05_RUNPOD_2GPU_DEBUG/seed_10/lr_0.0001//prediction/",
+            "_metrics_file": "/tmp/snapshots/downstream/dim_2/Glas_MedCoSS_Report_Xray_Path_buff_0.05_RUNPOD_2GPU_DEBUG/seed_10/lr_0.0001/prediction/metrics.json",
             "_seed": 10
         },
         {
             "task": "GlaS",
             "split": "test",
-            "dice": 0.7292035649422146,
-            "hd": 67.9954679354745,
+            "dice": 0.7248765467879379,
+            "hd": 67.01077511402075,
             "snapshot_dir": null,
-            "save_path": "snapshots/downstream/dim_2/Glas_MedCoSS_Report_Xray_Path_buff_0.05_RUNPOD_1GPU_DEBUG/seed_100/lr_0.0001/prediction/",
-            "_metrics_file": "/workspace/MedCoSS/snapshots/downstream/dim_2/Glas_MedCoSS_Report_Xray_Path_buff_0.05_RUNPOD_1GPU_DEBUG/seed_100/lr_0.0001/prediction/metrics.json",
+            "save_path": "/tmp/snapshots/downstream/dim_2/Glas_MedCoSS_Report_Xray_Path_buff_0.05_RUNPOD_2GPU_DEBUG/seed_100/lr_0.0001//prediction/",
+            "_metrics_file": "/tmp/snapshots/downstream/dim_2/Glas_MedCoSS_Report_Xray_Path_buff_0.05_RUNPOD_2GPU_DEBUG/seed_100/lr_0.0001/prediction/metrics.json",
             "_seed": 100
         }
     ]
