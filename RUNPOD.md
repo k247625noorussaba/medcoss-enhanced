@@ -431,7 +431,7 @@ python --version
 Install pip inside the venv:
 
 ```bash
-curl -sS https://bootstrap.pypa.io/get-pip.py | python
+curl -sS https://bootstrap.pypa.io/pip/3.8/get-pip.py | python
 ```
 
 Upgrade pip tools:
