@@ -260,7 +260,7 @@ def main():
         val_loss_MA = None
 
         val_best_loss = 999999
-        best_dice = 0
+        best_dice = -1
         for epoch in range(start_epoch, args.num_epochs):
 
             time_t1 = time.time()
