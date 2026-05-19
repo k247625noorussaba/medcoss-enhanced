@@ -598,6 +598,7 @@ After the SSL/debug run completes successfully, copy the outputs back to persist
 ```bash
 rsync -ah --progress /tmp/output_dir/ /workspace/output_dir/
 rsync -ah --progress /tmp/logs/ /workspace/logs/
+rsync -ah --progress /tmp/snapshots/ /workspace/MedCoSS/snapshots/
 ```
 
 Verify copied checkpoints:
