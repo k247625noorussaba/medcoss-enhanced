@@ -582,6 +582,51 @@ Training time ...
 
 ---
 
+## Copy Debug Outputs from `/tmp` to Persistent Storage
+
+For debug runs, outputs may be written to local container disk first:
+
+```bash
+OUTPUT_ROOT=/tmp/output_dir
+LOG_ROOT=/tmp/logs
+```
+
+This helps avoid slow or unstable checkpoint writes directly to the mounted `/workspace` volume.
+
+After the SSL/debug run completes successfully, copy the outputs back to persistent storage:
+
+```bash
+rsync -ah --progress /tmp/output_dir/ /workspace/output_dir/
+rsync -ah --progress /tmp/logs/ /workspace/logs/
+```
+
+Verify copied checkpoints:
+
+```bash
+find /workspace/output_dir -name "checkpoint-*.pth" -ls
+```
+
+Optional: verify that a checkpoint can be loaded:
+
+```bash
+python - <<'PY'
+import torch
+
+ckpt = "/workspace/output_dir/1D_text_RUNPOD_2GPU_DEBUG_1/checkpoint-0.pth"
+print("Testing:", ckpt)
+obj = torch.load(ckpt, map_location="cpu")
+print("OK:", obj.keys() if isinstance(obj, dict) else type(obj))
+PY
+```
+
+Once outputs are safely copied to `/workspace`, the `/tmp` copies may be removed if needed:
+
+```bash
+rm -rf /tmp/output_dir /tmp/logs
+```
+
+---
+
 ## Workflow Strategy
 
 ### Phase 1 — Small Dataset

@@ -13,8 +13,8 @@ US_REPORT="${DATA_ROOT}/us_report"
 US_XRAY="${DATA_ROOT}/us_xray"
 US_PATHOLOGY="${DATA_ROOT}/us_pathology"
 
-OUTPUT_ROOT=/workspace/output_dir
-LOG_ROOT=/workspace/logs
+OUTPUT_ROOT=/tmp/output_dir
+LOG_ROOT=/tmp/logs
 
 # Uni-Perceiver init for stage 1 (download per README; override if stored elsewhere)
 UNI_PERCEIVER_CKPT="${UNI_PERCEIVER_CKPT:-/workspace/checkpoints/uni-perceiver-base-L12-H768-224size-torch-pretrained.pth}"
@@ -33,7 +33,7 @@ mkdir -p "${output_dir}" "${log_dir}"
 ${DIST_LAUNCH} --master_port='29502' main_pretrain_single_modal.py \
 --model "unified_vit" \
 --batch_size 128 \
---num_workers 10 \
+--num_workers 2 \
 --norm_pix_loss \
 --mask_ratio 0.75 \
 --epochs 1 \
@@ -50,7 +50,7 @@ ${DIST_LAUNCH} --master_port='29502' main_pretrain_single_modal.py \
 # =============================================================================
 CUDA_VISIBLE_DEVICES=0 python main_buffer_kmean.py \
 --model "unified_vit" \
---num_workers 10 \
+--num_workers 2 \
 --norm_pix_loss \
 --data_path "${US_REPORT}" \
 --task_modality "1D_text" \
@@ -69,7 +69,7 @@ mkdir -p "${output_dir}" "${log_dir}"
 ${DIST_LAUNCH} --master_port='29361' main_pretrain_medcoss.py \
 --model "unified_vit" \
 --batch_size 128 \
---num_workers 10 \
+--num_workers 2 \
 --norm_pix_loss \
 --mask_ratio 0.75 \
 --epochs 1 \
@@ -91,7 +91,7 @@ ${DIST_LAUNCH} --master_port='29361' main_pretrain_medcoss.py \
 # =============================================================================
 CUDA_VISIBLE_DEVICES=0 python main_buffer_kmean.py \
 --model "unified_vit" \
---num_workers 10 \
+--num_workers 2 \
 --norm_pix_loss \
 --data_path "${US_XRAY}" \
 --task_modality "2D_xray" \
@@ -110,7 +110,7 @@ mkdir -p "${output_dir}" "${log_dir}"
 ${DIST_LAUNCH} --master_port='29361' main_pretrain_medcoss.py \
 --model "unified_vit" \
 --batch_size 128 \
---num_workers 10 \
+--num_workers 2 \
 --norm_pix_loss \
 --mask_ratio 0.75 \
 --epochs 1 \
