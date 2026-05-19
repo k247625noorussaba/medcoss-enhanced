@@ -19,7 +19,7 @@ LOG_ROOT=/workspace/logs
 # Uni-Perceiver init for stage 1 (download per README; override if stored elsewhere)
 UNI_PERCEIVER_CKPT="${UNI_PERCEIVER_CKPT:-/workspace/checkpoints/uni-perceiver-base-L12-H768-224size-torch-pretrained.pth}"
 
-# --- Single GPU (sanity pod) ---
+# --- Distributed ---
 export CUDA_VISIBLE_DEVICES=0,1
 DIST_LAUNCH="python -m torch.distributed.launch --nproc_per_node=2"
 

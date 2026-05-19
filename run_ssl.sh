@@ -1,7 +1,9 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # =============================================================================
 # MedCoSS SSL pretraining — 3 modalities (RunPod): Report → X-ray → Pathology
 # =============================================================================
+
+set -e
 
 # --- Dataset & I/O roots (RunPod) ---
 DATA_ROOT=/workspace/data/processed
