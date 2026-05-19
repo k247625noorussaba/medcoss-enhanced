@@ -8,8 +8,7 @@ opencv-python==4.13.0.92
 
 # System dependencies (install with apt, not pip):
 # apt update
-# apt install -y libgl1 libglib2.0-0 git curl
-# apt install -y openssh-server
+# apt install -y libgl1 libglib2.0-0 git curl openssh-server python3-pip
 # python -c "import nltk; nltk.download('punkt')"
 pydicom==2.4.4
 matplotlib==3.7.5
