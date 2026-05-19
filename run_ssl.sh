@@ -3,10 +3,10 @@
 # MedCoSS SSL pretraining — 3 modalities (RunPod): Report → X-ray → Pathology
 # =============================================================================
 
-set -e
+set -euo pipefail
 
 # --- Dataset & I/O roots (RunPod) ---
-DATA_ROOT=/workspace/data/processed
+DATA_ROOT=/workspace/data/processed_small
 US_REPORT="${DATA_ROOT}/us_report"
 US_XRAY="${DATA_ROOT}/us_xray"
 US_PATHOLOGY="${DATA_ROOT}/us_pathology"

@@ -5,7 +5,7 @@
 # With --epochs 1, checkpoints are checkpoint-0.pth (see util.misc.save_model).
 # =============================================================================
 
-set -e
+set -euo pipefail
 
 # --- Dataset & I/O roots (RunPod) ---
 DATA_ROOT=/workspace/data/processed_small
