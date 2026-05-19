@@ -304,8 +304,18 @@ def main():
                                                                                            int(time_t2 - time_t1)))
 
         model.eval()
-        print("load best weight from", osp.join(args.snapshot_dir, 'checkpoint.pth'))
-        best_performance_weight = torch.load(osp.join(args.snapshot_dir, 'checkpoint.pth'))['model']
+        checkpoint_path = osp.join(args.snapshot_dir, 'checkpoint.pth')
+        if args.local_rank == 0 and not osp.exists(checkpoint_path):
+            print("No best checkpoint was saved during validation; saving final epoch model as fallback.")
+            save_dict = {
+                'model': model.state_dict(),
+                'optimizer': optimizer.state_dict(),
+                'epoch': args.num_epochs,
+            }
+            torch.save(save_dict, checkpoint_path)
+
+        print("load best weight from", checkpoint_path)
+        best_performance_weight = torch.load(checkpoint_path, map_location="cpu")['model']
         model.load_state_dict(best_performance_weight, strict=True)
         model.cal_acc = True
         test_acc = []
