@@ -19,7 +19,7 @@ from pathlib import Path
 
 import torch
 import torch.distributed as dist
-from torch._six import inf
+from math import inf
 
 def add_weight_decay_lr(model, lr, slower_lr, slower_learner_name: list, weight_decay=1e-5, skip_list=()):
     decay_lr, decay_slower_lr = [], []
