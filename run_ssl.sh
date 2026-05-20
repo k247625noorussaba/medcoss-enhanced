@@ -12,7 +12,7 @@ RUN_TAG="${EPOCHS}epoch"
 if (( EPOCHS > 80 )); then WARMUP_EPOCHS=40; else WARMUP_EPOCHS=1; fi
 
 # --- Dataset & I/O roots (RunPod) ---
-DATA_ROOT=/workspace/data/processed
+DATA_ROOT=/workspace/data
 US_REPORT="${DATA_ROOT}/us_report"
 US_XRAY="${DATA_ROOT}/us_xray"
 US_PATHOLOGY="${DATA_ROOT}/us_pathology"

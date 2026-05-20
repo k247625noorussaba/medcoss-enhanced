@@ -194,7 +194,7 @@ find processed_small -maxdepth 2 -type d | head
 If the archive contains a top-level folder such as `data_small/`, the extracted structure may become:
 
 ```text
-/workspace/data/processed_small/data_small/
+/workspace/data_small/
 ```
 
 To inspect archive structure before extraction:
@@ -228,13 +228,13 @@ tar -tzf data_small.tar.gz | head
 Expected full dataset path:
 
 ```text
-/workspace/data/processed/
+/workspace/data/
 ```
 
 Expected small dataset path:
 
 ```text
-/workspace/data/processed_small/
+/workspace/data_small/
 ```
 
 Pretraining structure:
@@ -295,15 +295,15 @@ ds_pathology_seg/
 Check for old files:
 
 ```bash
-find /workspace/data/processed -name "pretrain_data_list.json"
-find /workspace/data/processed_small -name "pretrain_data_list.json"
+find /workspace/data -name "pretrain_data_list.json"
+find /workspace/data_small -name "pretrain_data_list.json"
 ```
 
 Delete them if found:
 
 ```bash
-find /workspace/data/processed -name "pretrain_data_list.json" -delete
-find /workspace/data/processed_small -name "pretrain_data_list.json" -delete
+find /workspace/data -name "pretrain_data_list.json" -delete
+find /workspace/data_small -name "pretrain_data_list.json" -delete
 ```
 
 Reason:
@@ -525,17 +525,17 @@ then the main dependencies are installed correctly.
 For full dataset:
 
 ```bash
-ls /workspace/data/processed/us_xray | wc -l
-ls /workspace/data/processed/us_pathology | wc -l
-ls -lh /workspace/data/processed/us_report/master.csv
-find /workspace/data/processed -maxdepth 2 -type d
+ls /workspace/data/us_xray | wc -l
+ls /workspace/data/us_pathology | wc -l
+ls -lh /workspace/data/us_report/master.csv
+find /workspace/data -maxdepth 2 -type d
 ```
 
 For small dataset:
 
 ```bash
-find /workspace/data/processed_small -maxdepth 2 -type d
-find /workspace/data/processed_small -type f | wc -l
+find /workspace/data_small -maxdepth 2 -type d
+find /workspace/data_small -type f | wc -l
 ```
 
 ---
@@ -635,7 +635,7 @@ rm -rf /tmp/output_dir /tmp/logs
 Use this first:
 
 ```text
-/workspace/data/processed_small/
+/workspace/data_small/
 ```
 
 Goal:
@@ -649,7 +649,7 @@ Goal:
 Use this after the small dataset pipeline works:
 
 ```text
-/workspace/data/processed/
+/workspace/data/
 ```
 
 Goal:

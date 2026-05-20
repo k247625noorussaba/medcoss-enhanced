@@ -6,7 +6,7 @@
 
 set -euo pipefail
 
-DATA_ROOT=/workspace/data/processed
+DATA_ROOT=/workspace/data
 DS_REPORT="${DATA_ROOT}/ds_report"
 DS_XRAY="${DATA_ROOT}/ds_xray"
 DS_PATH_CLS="${DATA_ROOT}/ds_pathology_cls"

@@ -8,7 +8,7 @@
 set -euo pipefail
 
 # --- Dataset & I/O roots (RunPod) ---
-DATA_ROOT=/workspace/data/processed_small
+DATA_ROOT=/workspace/data_small
 US_REPORT="${DATA_ROOT}/us_report"
 US_XRAY="${DATA_ROOT}/us_xray"
 US_PATHOLOGY="${DATA_ROOT}/us_pathology"
