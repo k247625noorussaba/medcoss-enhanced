@@ -88,13 +88,13 @@ Use this method for uploading files with `scp`.
 Example SCP upload from Windows CMD:
 
 ```bat
-scp -P 11528 -i %USERPROFILE%\.ssh\id_ed25519 C:\D\4th\Thesis\data_small\data_small.tar.gz root@154.54.102.51:/workspace/data/
+scp -P 11528 -i %USERPROFILE%\.ssh\id_ed25519 C:\D\4th\Thesis\data_small\data_small.tar.gz root@154.54.102.51:/tmp/data/
 ```
 
 General format:
 
 ```bat
-scp -P <PORT> -i %USERPROFILE%\.ssh\id_ed25519 <LOCAL_FILE_PATH> root@<POD_IP>:/workspace/data/
+scp -P <PORT> -i %USERPROFILE%\.ssh\id_ed25519 <LOCAL_FILE_PATH> root@<POD_IP>:/tmp/data/
 ```
 
 ---
@@ -165,20 +165,20 @@ ssh root@154.54.102.51 -p 11528 -i %USERPROFILE%\.ssh\id_ed25519
 Run this from Windows CMD, not inside the pod:
 
 ```bat
-scp -P 11528 -i %USERPROFILE%\.ssh\id_ed25519 C:\D\4th\Thesis\data_small\data_small.tar.gz root@154.54.102.51:/workspace/data/
+scp -P 11528 -i %USERPROFILE%\.ssh\id_ed25519 C:\D\4th\Thesis\data_small\data_small.tar.gz root@154.54.102.51:/tmp/data/
 ```
 
 After upload, verify inside the pod:
 
 ```bash
-cd /workspace/data
+cd /tmp/data
 ls -lh data_small.tar.gz
 ```
 
 Extract into `processed_small`:
 
 ```bash
-cd /workspace/data
+cd /tmp/data
 
 mkdir -p processed_small
 tar -xzf data_small.tar.gz -C processed_small
@@ -194,7 +194,7 @@ find processed_small -maxdepth 2 -type d | head
 If the archive contains a top-level folder such as `data_small/`, the extracted structure may become:
 
 ```text
-/workspace/data_small/
+/tmp/data_small/
 ```
 
 To inspect archive structure before extraction:
@@ -228,13 +228,13 @@ tar -tzf data_small.tar.gz | head
 Expected full dataset path:
 
 ```text
-/workspace/data/
+/tmp/data/
 ```
 
 Expected small dataset path:
 
 ```text
-/workspace/data_small/
+/tmp/data_small/
 ```
 
 Pretraining structure:
@@ -295,15 +295,15 @@ ds_pathology_seg/
 Check for old files:
 
 ```bash
-find /workspace/data -name "pretrain_data_list.json"
-find /workspace/data_small -name "pretrain_data_list.json"
+find /tmp/data -name "pretrain_data_list.json"
+find /tmp/data_small -name "pretrain_data_list.json"
 ```
 
 Delete them if found:
 
 ```bash
-find /workspace/data -name "pretrain_data_list.json" -delete
-find /workspace/data_small -name "pretrain_data_list.json" -delete
+find /tmp/data -name "pretrain_data_list.json" -delete
+find /tmp/data_small -name "pretrain_data_list.json" -delete
 ```
 
 Reason:
@@ -525,17 +525,17 @@ then the main dependencies are installed correctly.
 For full dataset:
 
 ```bash
-ls /workspace/data/us_xray | wc -l
-ls /workspace/data/us_pathology | wc -l
-ls -lh /workspace/data/us_report/master.csv
-find /workspace/data -maxdepth 2 -type d
+ls /tmp/data/us_xray | wc -l
+ls /tmp/data/us_pathology | wc -l
+ls -lh /tmp/data/us_report/master.csv
+find /tmp/data -maxdepth 2 -type d
 ```
 
 For small dataset:
 
 ```bash
-find /workspace/data_small -maxdepth 2 -type d
-find /workspace/data_small -type f | wc -l
+find /tmp/data_small -maxdepth 2 -type d
+find /tmp/data_small -type f | wc -l
 ```
 
 ---
@@ -635,7 +635,7 @@ rm -rf /tmp/output_dir /tmp/logs
 Use this first:
 
 ```text
-/workspace/data_small/
+/tmp/data_small/
 ```
 
 Goal:
@@ -649,7 +649,7 @@ Goal:
 Use this after the small dataset pipeline works:
 
 ```text
-/workspace/data/
+/tmp/data/
 ```
 
 Goal:
@@ -791,7 +791,7 @@ df -h
 Check folder size:
 
 ```bash
-du -sh /workspace/data/*
+du -sh /tmp/data/*
 ```
 
 Check files:

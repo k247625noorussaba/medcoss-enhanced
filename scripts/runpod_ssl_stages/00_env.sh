@@ -5,7 +5,7 @@ set -euo pipefail
 RUNPOD_SSL_STAGES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 export REPO_ROOT="$(cd "${RUNPOD_SSL_STAGES_DIR}/../.." && pwd)"
 
-export DATA_ROOT="${DATA_ROOT:-/workspace/data}"
+export DATA_ROOT="${DATA_ROOT:-/tmp/data}"
 export US_REPORT="${DATA_ROOT}/us_report"
 export US_XRAY="${DATA_ROOT}/us_xray"
 export US_PATHOLOGY="${DATA_ROOT}/us_pathology"
