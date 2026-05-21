@@ -17,15 +17,15 @@ US_REPORT="${DATA_ROOT}/us_report"
 US_XRAY="${DATA_ROOT}/us_xray"
 US_PATHOLOGY="${DATA_ROOT}/us_pathology"
 
-OUTPUT_ROOT=/workspace/output_dir
-LOG_ROOT=/workspace/logs
+OUTPUT_ROOT=/tmp/output_dir
+LOG_ROOT=/tmp/logs
 
 STAGE1_DIR="1D_text_${RUN_TAG}"
 STAGE2_DIR="MedCoSS_Report_Xray_Path_buff_0.05_cen_0.01_2D_Xray_${RUN_TAG}"
 STAGE3_DIR="MedCoSS_Report_Xray_Path_buff_0.05_cen_0.01_2D_Path_${RUN_TAG}"
 
 # Uni-Perceiver init for stage 1 (download per README; override if stored elsewhere)
-UNI_PERCEIVER_CKPT="${UNI_PERCEIVER_CKPT:-/workspace/checkpoints/uni-perceiver-base-L12-H768-224size-torch-pretrained.pth}"
+UNI_PERCEIVER_CKPT="${UNI_PERCEIVER_CKPT:-/tmp/checkpoints/uni-perceiver-base-L12-H768-224size-torch-pretrained.pth}"
 
 # --- Distributed ---
 export CUDA_VISIBLE_DEVICES=0,1
