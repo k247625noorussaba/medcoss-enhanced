@@ -54,7 +54,7 @@ case "$STAGE" in
     ${DIST_LAUNCH} --master_port='29502' main_pretrain_single_modal.py \
     --model "unified_vit" \
     --batch_size 128 \
-    --num_workers 10 \
+    --num_workers 2 \
     --norm_pix_loss \
     --mask_ratio 0.75 \
     --epochs "${EPOCHS}" \
@@ -84,7 +84,7 @@ PY
 
     CUDA_VISIBLE_DEVICES=0 python main_buffer_kmean.py \
     --model "unified_vit" \
-    --num_workers 10 \
+    --num_workers 2 \
     --norm_pix_loss \
     --data_path "${US_REPORT}" \
     --task_modality "1D_text" \
@@ -109,7 +109,7 @@ PY
     ${DIST_LAUNCH} --master_port='29361' main_pretrain_medcoss.py \
     --model "unified_vit" \
     --batch_size 128 \
-    --num_workers 10 \
+    --num_workers 2 \
     --norm_pix_loss \
     --mask_ratio 0.75 \
     --epochs "${EPOCHS}" \
@@ -144,7 +144,7 @@ PY
 
     CUDA_VISIBLE_DEVICES=0 python main_buffer_kmean.py \
     --model "unified_vit" \
-    --num_workers 10 \
+    --num_workers 2 \
     --norm_pix_loss \
     --data_path "${US_XRAY}" \
     --task_modality "2D_xray" \
@@ -169,7 +169,7 @@ PY
     ${DIST_LAUNCH} --master_port='29362' main_pretrain_medcoss.py \
     --model "unified_vit" \
     --batch_size 128 \
-    --num_workers 10 \
+    --num_workers 2 \
     --norm_pix_loss \
     --mask_ratio 0.75 \
     --epochs "${EPOCHS}" \
