@@ -6,6 +6,11 @@
 
 set -euo pipefail
 
+# --- Run length ---
+EPOCHS=1
+LAST_EPOCH=$((EPOCHS - 1))
+RUN_TAG="${EPOCHS}epoch"
+
 DATA_ROOT=/tmp/data
 DS_REPORT="${DATA_ROOT}/ds_report"
 DS_XRAY="${DATA_ROOT}/ds_xray"
@@ -13,7 +18,10 @@ DS_PATH_CLS="${DATA_ROOT}/ds_pathology_cls"
 DS_PATH_SEG="${DATA_ROOT}/ds_pathology_seg"
 SNAPSHOT_ROOT=/tmp/snapshots
 
-PRETRAINED_CKPT=/tmp/output_dir/MedCoSS_Report_Xray_Path_buff_0.05_cen_0.01_2D_Path_300/checkpoint-299.pth
+PRETRAINED_DIR="/tmp/output_dir/MedCoSS_Report_Xray_Path_buff_0.05_cen_0.01_2D_Path_${RUN_TAG}"
+PRETRAINED_CKPT="${PRETRAINED_DIR}/checkpoint-${LAST_EPOCH}.pth"
+
+test -f "$PRETRAINED_CKPT" || { echo "Missing pretrained checkpoint: $PRETRAINED_CKPT"; exit 1; }
 
 gpu_id=0
 
