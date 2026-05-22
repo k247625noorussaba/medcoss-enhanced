@@ -23,7 +23,7 @@ The pod may have 4× A100 GPUs, but the current MedCoSS SSL scripts use **2 GPUs
 
 ```bash
 export CUDA_VISIBLE_DEVICES=0,1
-DIST_LAUNCH="python -m torch.distributed.launch --nproc_per_node=2"
+DIST_LAUNCH="torchrun --standalone --nproc_per_node=2"
 ```
 
 To use 4 GPUs later, update both:

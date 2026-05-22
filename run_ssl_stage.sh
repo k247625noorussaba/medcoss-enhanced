@@ -83,7 +83,7 @@ UNI_PERCEIVER_CKPT="${UNI_PERCEIVER_CKPT:-/tmp/checkpoints/uni-perceiver-base-L1
 export CUDA_VISIBLE_DEVICES=0,1
 
 # Original MedCoSS uses torch.distributed.launch.
-DIST_LAUNCH="python -m torch.distributed.launch --nproc_per_node=2"
+DIST_LAUNCH="torchrun --standalone --nproc_per_node=2"
 
 # Selected stage from command line.
 STAGE="${1:-}"
