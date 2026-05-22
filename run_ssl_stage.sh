@@ -10,11 +10,19 @@
 #   Stage 3: Pathology continual SSL using report + X-ray buffers
 #
 # Usage:
-#   bash run_ssl_stage.sh 1      # Report SSL
-#   bash run_ssl_stage.sh b1     # Report buffer
-#   bash run_ssl_stage.sh 2      # X-ray continual SSL
-#   bash run_ssl_stage.sh b2     # X-ray buffer
-#   bash run_ssl_stage.sh 3      # Pathology continual SSL
+#   bash run_ssl_stage.sh 1              # Report SSL
+#   bash run_ssl_stage.sh b1             # Report buffer
+#   bash run_ssl_stage.sh 2              # X-ray continual SSL
+#   bash run_ssl_stage.sh b2             # X-ray buffer
+#   bash run_ssl_stage.sh 3              # Pathology continual SSL
+#   bash run_ssl_stage.sh all            # Run all stages sequentially
+#
+# Aliases:
+#   1:  report, text, stage1
+#   b1: buffer1, report_buffer, text_buffer
+#   2:  xray, stage2
+#   b2: buffer2, xray_buffer
+#   3:  pathology, path, stage3
 #
 # Recommended:
 #   Run long stages inside tmux so SSH disconnects do not kill the job.
@@ -98,7 +106,7 @@ echo "STAGE=${STAGE}"
 echo "============================================================"
 
 # =============================================================================
-# 4) Helper function: verify checkpoint can be loaded
+# 4) Helper functions
 # =============================================================================
 
 verify_checkpoint() {
@@ -117,201 +125,215 @@ print("OK:", f)
 PY
 }
 
+verify_file() {
+  local file_path="$1"
+  local label="$2"
+
+  test -f "$file_path" || {
+    echo "Missing ${label}: $file_path"
+    exit 1
+  }
+
+  echo "OK: ${label}: $file_path"
+}
+
 # =============================================================================
-# 5) Stage selector
+# 5) Stage functions
+# =============================================================================
+
+run_stage1() {
+  echo "Running Stage 1 — Report SSL"
+
+  local output_dir="${OUTPUT_ROOT}/${STAGE1_DIR}"
+  local log_dir="${LOG_ROOT}/${STAGE1_DIR}"
+  mkdir -p "${output_dir}" "${log_dir}"
+
+  ${DIST_LAUNCH} --master_port='29502' main_pretrain_single_modal.py \
+    --model "unified_vit" \
+    --batch_size 128 \
+    --num_workers 10 \
+    --norm_pix_loss \
+    --mask_ratio 0.75 \
+    --epochs "${EPOCHS}" \
+    --warmup_epochs "${WARMUP_EPOCHS}" \
+    --blr 1.5e-4 --weight_decay 0.05 \
+    --data_path "${US_REPORT}" \
+    --task_modality "1D_text" \
+    --load_current_pretrained_weight "${UNI_PERCEIVER_CKPT}" \
+    --output_dir="${output_dir}" \
+    --log_dir="${log_dir}"
+
+  local stage1_ckpt="${OUTPUT_ROOT}/${STAGE1_DIR}/checkpoint-${LAST_EPOCH}.pth"
+  verify_checkpoint "$stage1_ckpt"
+}
+
+run_buffer1() {
+  echo "Running Buffer 1 — Report buffer"
+
+  local stage1_ckpt="${OUTPUT_ROOT}/${STAGE1_DIR}/checkpoint-${LAST_EPOCH}.pth"
+  verify_checkpoint "$stage1_ckpt"
+
+  CUDA_VISIBLE_DEVICES=0 python main_buffer_kmean.py \
+    --model "unified_vit" \
+    --num_workers 10 \
+    --norm_pix_loss \
+    --data_path "${US_REPORT}" \
+    --task_modality "1D_text" \
+    --load_current_pretrained_weight "$stage1_ckpt" \
+    --num_center 0.01 \
+    --buffer_ratio 0.05 \
+    --exp_name "kmean"
+
+  local report_buffer="${OUTPUT_ROOT}/${STAGE1_DIR}/1D_text_0.01_0.05_kmean.csv"
+  verify_file "$report_buffer" "report buffer"
+}
+
+run_stage2() {
+  echo "Running Stage 2 — X-ray continual SSL"
+
+  local output_dir="${OUTPUT_ROOT}/${STAGE2_DIR}"
+  local log_dir="${LOG_ROOT}/${STAGE2_DIR}"
+  mkdir -p "${output_dir}" "${log_dir}"
+
+  local stage1_ckpt="${OUTPUT_ROOT}/${STAGE1_DIR}/checkpoint-${LAST_EPOCH}.pth"
+  local report_buffer="${OUTPUT_ROOT}/${STAGE1_DIR}/1D_text_0.01_0.05_kmean.csv"
+
+  verify_checkpoint "$stage1_ckpt"
+  verify_file "$report_buffer" "report buffer"
+
+  ${DIST_LAUNCH} --master_port='29361' main_pretrain_medcoss.py \
+    --model "unified_vit" \
+    --batch_size 128 \
+    --num_workers 10 \
+    --norm_pix_loss \
+    --mask_ratio 0.75 \
+    --epochs "${EPOCHS}" \
+    --warmup_epochs "${WARMUP_EPOCHS}" \
+    --blr 1.5e-4 --weight_decay 0.05 \
+    --task_modality "2D_xray" \
+    --load_current_pretrained_weight "$stage1_ckpt" \
+    --data_path_1D_text "${US_REPORT}" \
+    --data_path_2D_xray "${US_XRAY}" \
+    --output_dir="${output_dir}" \
+    --log_dir="${log_dir}" \
+    --num_center 0.01 \
+    --buffer_ratio 0.05 \
+    --exp_name "kmean" \
+    --mix_up 1
+
+  local stage2_ckpt="${OUTPUT_ROOT}/${STAGE2_DIR}/checkpoint-${LAST_EPOCH}.pth"
+  verify_checkpoint "$stage2_ckpt"
+}
+
+run_buffer2() {
+  echo "Running Buffer 2 — X-ray buffer"
+
+  local stage2_ckpt="${OUTPUT_ROOT}/${STAGE2_DIR}/checkpoint-${LAST_EPOCH}.pth"
+  verify_checkpoint "$stage2_ckpt"
+
+  CUDA_VISIBLE_DEVICES=0 python main_buffer_kmean.py \
+    --model "unified_vit" \
+    --num_workers 10 \
+    --norm_pix_loss \
+    --data_path "${US_XRAY}" \
+    --task_modality "2D_xray" \
+    --load_current_pretrained_weight "$stage2_ckpt" \
+    --num_center 0.01 \
+    --buffer_ratio 0.05 \
+    --exp_name "kmean"
+
+  local xray_buffer="${OUTPUT_ROOT}/${STAGE2_DIR}/2D_xray_0.01_0.05_kmean.json"
+  verify_file "$xray_buffer" "X-ray buffer"
+}
+
+run_stage3() {
+  echo "Running Stage 3 — Pathology continual SSL"
+
+  local output_dir="${OUTPUT_ROOT}/${STAGE3_DIR}"
+  local log_dir="${LOG_ROOT}/${STAGE3_DIR}"
+  mkdir -p "${output_dir}" "${log_dir}"
+
+  local stage2_ckpt="${OUTPUT_ROOT}/${STAGE2_DIR}/checkpoint-${LAST_EPOCH}.pth"
+  local report_buffer_in_stage2="${OUTPUT_ROOT}/${STAGE2_DIR}/1D_text_0.01_0.05_kmean.csv"
+  local xray_buffer="${OUTPUT_ROOT}/${STAGE2_DIR}/2D_xray_0.01_0.05_kmean.json"
+
+  verify_checkpoint "$stage2_ckpt"
+  verify_file "$report_buffer_in_stage2" "copied report buffer in Stage 2 output"
+  verify_file "$xray_buffer" "X-ray buffer"
+
+  ${DIST_LAUNCH} --master_port='29362' main_pretrain_medcoss.py \
+    --model "unified_vit" \
+    --batch_size 128 \
+    --num_workers 10 \
+    --norm_pix_loss \
+    --mask_ratio 0.75 \
+    --epochs "${EPOCHS}" \
+    --warmup_epochs "${WARMUP_EPOCHS}" \
+    --blr 1.5e-4 --weight_decay 0.05 \
+    --task_modality "2D_path" \
+    --load_current_pretrained_weight "$stage2_ckpt" \
+    --data_path_1D_text "${US_REPORT}" \
+    --data_path_2D_xray "${US_XRAY}" \
+    --data_path_2D_path "${US_PATHOLOGY}" \
+    --output_dir="${output_dir}" \
+    --log_dir="${log_dir}" \
+    --num_center 0.01 \
+    --buffer_ratio 0.05 \
+    --exp_name "kmean" \
+    --mix_up 1
+
+  local stage3_ckpt="${OUTPUT_ROOT}/${STAGE3_DIR}/checkpoint-${LAST_EPOCH}.pth"
+  verify_checkpoint "$stage3_ckpt"
+}
+
+# =============================================================================
+# 6) Stage selector
 # =============================================================================
 
 case "$STAGE" in
-
-  # ---------------------------------------------------------------------------
-  # Stage 1 — Report-only SSL pretraining
-  # ---------------------------------------------------------------------------
-  1)
-    echo "Running Stage 1 — Report SSL"
-
-    output_dir="${OUTPUT_ROOT}/${STAGE1_DIR}"
-    log_dir="${LOG_ROOT}/${STAGE1_DIR}"
-    mkdir -p "${output_dir}" "${log_dir}"
-
-    ${DIST_LAUNCH} --master_port='29502' main_pretrain_single_modal.py \
-      --model "unified_vit" \
-      --batch_size 128 \
-      --num_workers 10 \
-      --norm_pix_loss \
-      --mask_ratio 0.75 \
-      --epochs "${EPOCHS}" \
-      --warmup_epochs "${WARMUP_EPOCHS}" \
-      --blr 1.5e-4 --weight_decay 0.05 \
-      --data_path "${US_REPORT}" \
-      --task_modality "1D_text" \
-      --load_current_pretrained_weight "${UNI_PERCEIVER_CKPT}" \
-      --output_dir="${output_dir}" \
-      --log_dir="${log_dir}"
-
-    STAGE1_CKPT="${OUTPUT_ROOT}/${STAGE1_DIR}/checkpoint-${LAST_EPOCH}.pth"
-    verify_checkpoint "$STAGE1_CKPT"
+  1|report|text|stage1)
+    run_stage1
     ;;
 
-  # ---------------------------------------------------------------------------
-  # Buffer 1 — Build report rehearsal buffer
-  # ---------------------------------------------------------------------------
-  b1)
-    echo "Running Buffer 1 — Report buffer"
-
-    STAGE1_CKPT="${OUTPUT_ROOT}/${STAGE1_DIR}/checkpoint-${LAST_EPOCH}.pth"
-    verify_checkpoint "$STAGE1_CKPT"
-
-    CUDA_VISIBLE_DEVICES=0 python main_buffer_kmean.py \
-      --model "unified_vit" \
-      --num_workers 10 \
-      --norm_pix_loss \
-      --data_path "${US_REPORT}" \
-      --task_modality "1D_text" \
-      --load_current_pretrained_weight "$STAGE1_CKPT" \
-      --num_center 0.01 \
-      --buffer_ratio 0.05 \
-      --exp_name "kmean"
-
-    REPORT_BUFFER="${OUTPUT_ROOT}/${STAGE1_DIR}/1D_text_0.01_0.05_kmean.csv"
-    test -f "$REPORT_BUFFER" || {
-      echo "Missing report buffer: $REPORT_BUFFER"
-      exit 1
-    }
-    echo "OK: $REPORT_BUFFER"
+  b1|buffer1|report_buffer|text_buffer)
+    run_buffer1
     ;;
 
-  # ---------------------------------------------------------------------------
-  # Stage 2 — X-ray continual SSL using report buffer
-  # ---------------------------------------------------------------------------
-  2)
-    echo "Running Stage 2 — X-ray continual SSL"
-
-    output_dir="${OUTPUT_ROOT}/${STAGE2_DIR}"
-    log_dir="${LOG_ROOT}/${STAGE2_DIR}"
-    mkdir -p "${output_dir}" "${log_dir}"
-
-    STAGE1_CKPT="${OUTPUT_ROOT}/${STAGE1_DIR}/checkpoint-${LAST_EPOCH}.pth"
-    REPORT_BUFFER="${OUTPUT_ROOT}/${STAGE1_DIR}/1D_text_0.01_0.05_kmean.csv"
-
-    verify_checkpoint "$STAGE1_CKPT"
-    test -f "$REPORT_BUFFER" || {
-      echo "Missing report buffer: $REPORT_BUFFER"
-      exit 1
-    }
-
-    ${DIST_LAUNCH} --master_port='29361' main_pretrain_medcoss.py \
-      --model "unified_vit" \
-      --batch_size 128 \
-      --num_workers 10 \
-      --norm_pix_loss \
-      --mask_ratio 0.75 \
-      --epochs "${EPOCHS}" \
-      --warmup_epochs "${WARMUP_EPOCHS}" \
-      --blr 1.5e-4 --weight_decay 0.05 \
-      --task_modality "2D_xray" \
-      --load_current_pretrained_weight "$STAGE1_CKPT" \
-      --data_path_1D_text "${US_REPORT}" \
-      --data_path_2D_xray "${US_XRAY}" \
-      --output_dir="${output_dir}" \
-      --log_dir="${log_dir}" \
-      --num_center 0.01 \
-      --buffer_ratio 0.05 \
-      --exp_name "kmean" \
-      --mix_up 1
-
-    STAGE2_CKPT="${OUTPUT_ROOT}/${STAGE2_DIR}/checkpoint-${LAST_EPOCH}.pth"
-    verify_checkpoint "$STAGE2_CKPT"
+  2|xray|stage2)
+    run_stage2
     ;;
 
-  # ---------------------------------------------------------------------------
-  # Buffer 2 — Build X-ray rehearsal buffer
-  # ---------------------------------------------------------------------------
-  b2)
-    echo "Running Buffer 2 — X-ray buffer"
-
-    STAGE2_CKPT="${OUTPUT_ROOT}/${STAGE2_DIR}/checkpoint-${LAST_EPOCH}.pth"
-    verify_checkpoint "$STAGE2_CKPT"
-
-    CUDA_VISIBLE_DEVICES=0 python main_buffer_kmean.py \
-      --model "unified_vit" \
-      --num_workers 10 \
-      --norm_pix_loss \
-      --data_path "${US_XRAY}" \
-      --task_modality "2D_xray" \
-      --load_current_pretrained_weight "$STAGE2_CKPT" \
-      --num_center 0.01 \
-      --buffer_ratio 0.05 \
-      --exp_name "kmean"
-
-    XRAY_BUFFER="${OUTPUT_ROOT}/${STAGE2_DIR}/2D_xray_0.01_0.05_kmean.json"
-    test -f "$XRAY_BUFFER" || {
-      echo "Missing X-ray buffer: $XRAY_BUFFER"
-      exit 1
-    }
-    echo "OK: $XRAY_BUFFER"
+  b2|buffer2|xray_buffer)
+    run_buffer2
     ;;
 
-  # ---------------------------------------------------------------------------
-  # Stage 3 — Pathology continual SSL using report + X-ray buffers
-  # ---------------------------------------------------------------------------
-  3)
-    echo "Running Stage 3 — Pathology continual SSL"
-
-    output_dir="${OUTPUT_ROOT}/${STAGE3_DIR}"
-    log_dir="${LOG_ROOT}/${STAGE3_DIR}"
-    mkdir -p "${output_dir}" "${log_dir}"
-
-    STAGE2_CKPT="${OUTPUT_ROOT}/${STAGE2_DIR}/checkpoint-${LAST_EPOCH}.pth"
-    REPORT_BUFFER_IN_STAGE2="${OUTPUT_ROOT}/${STAGE2_DIR}/1D_text_0.01_0.05_kmean.csv"
-    XRAY_BUFFER="${OUTPUT_ROOT}/${STAGE2_DIR}/2D_xray_0.01_0.05_kmean.json"
-
-    verify_checkpoint "$STAGE2_CKPT"
-
-    test -f "$REPORT_BUFFER_IN_STAGE2" || {
-      echo "Missing copied report buffer in Stage 2 output: $REPORT_BUFFER_IN_STAGE2"
-      exit 1
-    }
-
-    test -f "$XRAY_BUFFER" || {
-      echo "Missing X-ray buffer: $XRAY_BUFFER"
-      exit 1
-    }
-
-    ${DIST_LAUNCH} --master_port='29362' main_pretrain_medcoss.py \
-      --model "unified_vit" \
-      --batch_size 128 \
-      --num_workers 10 \
-      --norm_pix_loss \
-      --mask_ratio 0.75 \
-      --epochs "${EPOCHS}" \
-      --warmup_epochs "${WARMUP_EPOCHS}" \
-      --blr 1.5e-4 --weight_decay 0.05 \
-      --task_modality "2D_path" \
-      --load_current_pretrained_weight "$STAGE2_CKPT" \
-      --data_path_1D_text "${US_REPORT}" \
-      --data_path_2D_xray "${US_XRAY}" \
-      --data_path_2D_path "${US_PATHOLOGY}" \
-      --output_dir="${output_dir}" \
-      --log_dir="${log_dir}" \
-      --num_center 0.01 \
-      --buffer_ratio 0.05 \
-      --exp_name "kmean" \
-      --mix_up 1
-
-    STAGE3_CKPT="${OUTPUT_ROOT}/${STAGE3_DIR}/checkpoint-${LAST_EPOCH}.pth"
-    verify_checkpoint "$STAGE3_CKPT"
+  3|pathology|path|stage3)
+    run_stage3
     ;;
 
-  # ---------------------------------------------------------------------------
-  # Invalid/missing argument
-  # ---------------------------------------------------------------------------
+  all)
+    run_stage1
+    run_buffer1
+    run_stage2
+    run_buffer2
+    run_stage3
+    ;;
+
   *)
     echo "Usage:"
-    echo "  bash run_ssl_stage.sh 1      # Stage 1: report SSL"
-    echo "  bash run_ssl_stage.sh b1     # Buffer 1: report buffer"
-    echo "  bash run_ssl_stage.sh 2      # Stage 2: X-ray continual SSL"
-    echo "  bash run_ssl_stage.sh b2     # Buffer 2: X-ray buffer"
-    echo "  bash run_ssl_stage.sh 3      # Stage 3: pathology continual SSL"
+    echo "  bash run_ssl_stage.sh 1              # Stage 1: report SSL"
+    echo "  bash run_ssl_stage.sh b1             # Buffer 1: report buffer"
+    echo "  bash run_ssl_stage.sh 2              # Stage 2: X-ray continual SSL"
+    echo "  bash run_ssl_stage.sh b2             # Buffer 2: X-ray buffer"
+    echo "  bash run_ssl_stage.sh 3              # Stage 3: pathology continual SSL"
+    echo "  bash run_ssl_stage.sh all            # Run all SSL stages sequentially"
+    echo ""
+    echo "Aliases:"
+    echo "  1:  report, text, stage1"
+    echo "  b1: buffer1, report_buffer, text_buffer"
+    echo "  2:  xray, stage2"
+    echo "  b2: buffer2, xray_buffer"
+    echo "  3:  pathology, path, stage3"
     exit 1
     ;;
 esac
