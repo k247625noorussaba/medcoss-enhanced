@@ -320,7 +320,7 @@ Install system-level dependencies with `apt`, not `pip`.
 
 ```bash
 apt update
-apt install -y libgl1 libglib2.0-0 git curl openssh-server python3-pip rsync tree
+apt install -y libgl1 libglib2.0-0 git curl openssh-server python3-pip rsync tree tmux
 ```
 
 These are needed for:
