@@ -149,7 +149,7 @@ PY
     --data_path "${US_XRAY}" \
     --task_modality "2D_xray" \
     --load_current_pretrained_weight "$STAGE2_CKPT" \
-    --num_center 0.01 \
+    --num_center 0.001 \
     --buffer_ratio 0.05 \
     --exp_name "kmean"
     ;;
