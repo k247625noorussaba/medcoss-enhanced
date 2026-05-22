@@ -1,73 +1,118 @@
 {
     "dataset_info": {
-        "data_root": "C:\\D\\4th\\Thesis\\data_small",
+        "data_root": "/tmp/data",
+        "workspace_data_root": "/workspace/data",
         "us_report": {
             "role": "upstream SSL report modality",
-            "records": 400
+            "source": "PubMed abstracts formatted as MedCoSS-style report input",
+            "target_records": 200000,
+            "usable_records_loaded": 199897,
+            "file": "master.csv"
         },
         "us_xray": {
             "role": "upstream SSL chest X-ray images",
-            "file_count": 401,
-            "by_extension": { ".png": 400, ".json": 1 },
-            "image_files": 400
+            "source": "NIH ChestXray14-style upstream X-ray dataset",
+            "file_count": 112121,
+            "by_extension": {
+                ".png": 112120,
+                ".json": 1
+            },
+            "image_files": 112120
         },
         "us_pathology": {
             "role": "upstream SSL pathology (2D) images",
-            "file_count": 401,
-            "by_extension": { ".tif": 400, ".json": 1 },
-            "image_files": 400
+            "source": "NCT-CRC-HE-100K-style pathology image dataset",
+            "file_count": 100001,
+            "by_extension": {
+                ".tif": 100000,
+                ".json": 1
+            },
+            "image_files": 100000
         },
         "ds_report": {
-            "role": "downstream report classification (e.g. PubMed20k-style)",
+            "role": "downstream report classification (PubMed20k sentence classification)",
+            "unit": "labeled sentences, not abstracts",
             "splits": {
-                "train": 50,
-                "dev": 20,
-                "test": 20
+                "train": 180040,
+                "dev": 30212,
+                "test": 30135
             },
-            "total_records": 90
+            "total_records": 240387,
+            "num_classes": 5,
+            "classes": [
+                "BACKGROUND",
+                "OBJECTIVE",
+                "METHODS",
+                "RESULTS",
+                "CONCLUSIONS"
+            ]
         },
         "ds_xray": {
-            "role": "downstream Chest_XR images",
-            "file_count": 210,
-            "by_extension": { ".png": 210 },
+            "role": "downstream Chest_XR image classification",
+            "source": "COVID-19 Radiography-style X-ray classification dataset",
+            "file_count": 15153,
+            "by_extension": {
+                ".png": 15153
+            },
             "folder_distribution": {
                 "train": {
-                    "total_files": 150,
-                    "by_class": { "covid": 50, "normal": 50, "pneumonia": 50 }
+                    "total_files": 12121,
+                    "by_class": {
+                        "covid": 2892,
+                        "normal": 8153,
+                        "pneumonia": 1076
+                    }
                 },
                 "validation": {
-                    "total_files": 60,
-                    "by_class": { "covid": 20, "normal": 20, "pneumonia": 20 }
+                    "total_files": 3032,
+                    "by_class": {
+                        "covid": 724,
+                        "normal": 2039,
+                        "pneumonia": 269
+                    }
                 }
             }
         },
         "ds_pathology_cls": {
             "role": "downstream NCT_CRC_HE / pathology classification images",
-            "file_count": 450,
-            "by_extension": { ".tif": 450 },
+            "source": "CRC-VAL-HE-7K-style pathology classification dataset",
+            "file_count": 7180,
+            "by_extension": {
+                ".tif": 7180
+            },
             "folder_distribution": {
                 "by_class_folder": {
-                    "ADI": 50,
-                    "BACK": 50,
-                    "DEB": 50,
-                    "LYM": 50,
-                    "MUC": 50,
-                    "MUS": 50,
-                    "NORM": 50,
-                    "STR": 50,
-                    "TUM": 50
+                    "ADI": 1338,
+                    "BACK": 847,
+                    "DEB": 339,
+                    "LYM": 634,
+                    "MUC": 1035,
+                    "MUS": 592,
+                    "NORM": 741,
+                    "STR": 421,
+                    "TUM": 1233
                 },
-                "num_class_folders": 9,
-                "files_per_class_folder": 50
+                "num_class_folders": 9
             }
         },
         "ds_pathology_seg": {
-            "role": "downstream GlaS-style pathology segmentation (images on disk)",
-            "file_count": 80,
-            "by_extension": { ".png": 80 },
+            "role": "downstream GlaS-style pathology segmentation",
+            "source": "GlaS pathology segmentation dataset",
+            "file_count": 330,
+            "by_extension": {
+                ".png": 330
+            },
             "folder_distribution": {
-                "train": { "images": 20, "labels": 20, "total_files": 40 },
-                "test": { "images": 20, "labels": 20, "total_files": 40 }
+                "train": {
+                    "images": 85,
+                    "labels": 85,
+                    "total_files": 170
+                },
+                "test": {
+                    "images": 80,
+                    "labels": 80,
+                    "total_files": 160
+                }
             }
         }
     }

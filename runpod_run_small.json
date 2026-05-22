@@ -1,12 +1,16 @@
 {
     "dataset_info": {
         "data_root": "C:\\D\\4th\\Thesis\\data_small",
+        "runpod_data_root": "/tmp/data_small",
         "us_report": {
             "role": "upstream SSL report modality",
-            "records": 400
+            "source": "small PubMed-style report subset formatted as MedCoSS report input",
+            "records": 400,
+            "file": "master.csv"
         },
         "us_xray": {
             "role": "upstream SSL chest X-ray images",
+            "source": "small upstream X-ray subset",
             "file_count": 401,
             "by_extension": {
                 ".png": 400,
@@ -16,6 +20,7 @@
         },
         "us_pathology": {
             "role": "upstream SSL pathology (2D) images",
+            "source": "small upstream pathology image subset",
             "file_count": 401,
             "by_extension": {
                 ".tif": 400,
@@ -24,16 +29,27 @@
             "image_files": 400
         },
         "ds_report": {
-            "role": "downstream report classification (e.g. PubMed20k-style)",
+            "role": "downstream report classification",
+            "source": "small PubMed20k-style report classification subset",
+            "unit": "labeled sentences",
             "splits": {
                 "train": 50,
                 "dev": 20,
                 "test": 20
             },
-            "total_records": 90
+            "total_records": 90,
+            "num_classes": 5,
+            "classes": [
+                "BACKGROUND",
+                "OBJECTIVE",
+                "METHODS",
+                "RESULTS",
+                "CONCLUSIONS"
+            ]
         },
         "ds_xray": {
-            "role": "downstream Chest_XR images",
+            "role": "downstream Chest_XR image classification",
+            "source": "small COVID/normal/pneumonia X-ray classification subset",
             "file_count": 210,
             "by_extension": {
                 ".png": 210
@@ -59,6 +75,7 @@
         },
         "ds_pathology_cls": {
             "role": "downstream NCT_CRC_HE / pathology classification images",
+            "source": "small 9-class pathology classification subset",
             "file_count": 450,
             "by_extension": {
                 ".tif": 450
@@ -80,7 +97,8 @@
             }
         },
         "ds_pathology_seg": {
-            "role": "downstream GlaS-style pathology segmentation (images on disk)",
+            "role": "downstream GlaS-style pathology segmentation",
+            "source": "small GlaS-style segmentation subset",
             "file_count": 80,
             "by_extension": {
                 ".png": 80
