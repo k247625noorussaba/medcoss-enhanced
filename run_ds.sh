@@ -10,6 +10,11 @@ set -euo pipefail
 EPOCHS=1
 LAST_EPOCH=$((EPOCHS - 1))
 RUN_TAG="${EPOCHS}epoch"
+DS_REPORTS_EPOCHS=5
+DS_XRAY_EPOCHS=80
+DS_PATHOLOGYCLS_EPOCHS=10
+DS_PATHOLOGYSEG_EPOCHS=100
+DS_SEEDS=(0)
 
 DATA_ROOT=/tmp/data
 DS_REPORT="${DATA_ROOT}/ds_report"
@@ -47,7 +52,7 @@ meid='_'$exp_name'/seed_'$seed'/lr_'$lr'/'
 
 path_id=$task_id$meid
 echo $task_id" Training - shallow"
-snapshot_dir="${SNAPSHOT_ROOT}/downstream/dim_1${path_id}"
+snapshot_dir="${SNAPSHOT_ROOT}/downstream/dim_1/${path_id}"
 mkdir -p $snapshot_dir
 CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_1/PudMed20k/main.py \
 --arch='unified_vit' \
@@ -56,7 +61,7 @@ CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_1/PudMed20k/main.py \
 --input_size=112 \
 --batch_size=64 \
 --num_gpus=1 \
---num_epochs=5 \
+--num_epochs=$DS_REPORTS_EPOCHS \
 --start_epoch=0 \
 --learning_rate=$lr \
 --num_classes=5 \
@@ -73,7 +78,7 @@ meid='_'$exp_name'/seed_'$seed'/lr_'$lr'/'
 
 path_id=$task_id$meid
 echo $task_id" Training - shallow"
-snapshot_dir="${SNAPSHOT_ROOT}/downstream/dim_1${path_id}"
+snapshot_dir="${SNAPSHOT_ROOT}/downstream/dim_1/${path_id}"
 mkdir -p $snapshot_dir
 CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_1/PudMed20k/main.py \
 --arch='unified_vit' \
@@ -82,7 +87,7 @@ CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_1/PudMed20k/main.py \
 --input_size=112 \
 --batch_size=64 \
 --num_gpus=1 \
---num_epochs=5 \
+--num_epochs=$DS_REPORTS_EPOCHS \
 --start_epoch=0 \
 --learning_rate=$lr \
 --num_classes=5 \
@@ -99,7 +104,7 @@ meid='_'$exp_name'/seed_'$seed'/lr_'$lr'/'
 
 path_id=$task_id$meid
 echo $task_id" Training - shallow"
-snapshot_dir="${SNAPSHOT_ROOT}/downstream/dim_1${path_id}"
+snapshot_dir="${SNAPSHOT_ROOT}/downstream/dim_1/${path_id}"
 mkdir -p $snapshot_dir
 CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_1/PudMed20k/main.py \
 --arch='unified_vit' \
@@ -108,7 +113,7 @@ CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_1/PudMed20k/main.py \
 --input_size=112 \
 --batch_size=64 \
 --num_gpus=1 \
---num_epochs=5 \
+--num_epochs=$DS_REPORTS_EPOCHS \
 --start_epoch=0 \
 --learning_rate=$lr \
 --num_classes=5 \
@@ -135,7 +140,7 @@ meid='_'$exp_name'/seed_'$seed'/lr_'$lr'/'
 
 path_id=$task_id$meid
 echo $task_id" Training - shallow"
-snapshot_dir="${SNAPSHOT_ROOT}/downstream/dim_2${path_id}"
+snapshot_dir="${SNAPSHOT_ROOT}/downstream/dim_2/${path_id}"
 mkdir -p $snapshot_dir
 CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/Chest_XR/main.py \
 --arch='unified_vit' \
@@ -144,7 +149,7 @@ CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/Chest_XR/main.py \
 --input_size='224,224' \
 --batch_size=32 \
 --num_gpus=1 \
---num_epochs=80 \
+--num_epochs=$DS_XRAY_EPOCHS \
 --start_epoch=0 \
 --learning_rate=$lr \
 --num_classes=3 \
@@ -159,7 +164,7 @@ meid='_'$exp_name'/seed_'$seed'/lr_'$lr'/'
 
 path_id=$task_id$meid
 echo $task_id" Training - shallow"
-snapshot_dir="${SNAPSHOT_ROOT}/downstream/dim_2${path_id}"
+snapshot_dir="${SNAPSHOT_ROOT}/downstream/dim_2/${path_id}"
 mkdir -p $snapshot_dir
 CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/Chest_XR/main.py \
 --arch='unified_vit' \
@@ -168,7 +173,7 @@ CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/Chest_XR/main.py \
 --input_size='224,224' \
 --batch_size=32 \
 --num_gpus=1 \
---num_epochs=80 \
+--num_epochs=$DS_XRAY_EPOCHS \
 --start_epoch=0 \
 --learning_rate=$lr \
 --num_classes=3 \
@@ -184,7 +189,7 @@ meid='_'$exp_name'/seed_'$seed'/lr_'$lr'/'
 
 path_id=$task_id$meid
 echo $task_id" Training - shallow"
-snapshot_dir="${SNAPSHOT_ROOT}/downstream/dim_2${path_id}"
+snapshot_dir="${SNAPSHOT_ROOT}/downstream/dim_2/${path_id}"
 mkdir -p $snapshot_dir
 CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/Chest_XR/main.py \
 --arch='unified_vit' \
@@ -193,7 +198,7 @@ CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/Chest_XR/main.py \
 --input_size='224,224' \
 --batch_size=32 \
 --num_gpus=1 \
---num_epochs=80 \
+--num_epochs=$DS_XRAY_EPOCHS \
 --start_epoch=0 \
 --learning_rate=$lr \
 --num_classes=3 \
@@ -219,7 +224,7 @@ meid='_'$exp_name'/seed_'$seed'/lr_'$lr'/'
 
 path_id=$task_id$meid
 echo $task_id" Training - shallow"
-snapshot_dir="${SNAPSHOT_ROOT}/downstream/dim_2${path_id}"
+snapshot_dir="${SNAPSHOT_ROOT}/downstream/dim_2/${path_id}"
 mkdir -p $snapshot_dir
 CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/NCT_CRC_HE/main.py \
 --arch='unified_vit' \
@@ -228,7 +233,7 @@ CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/NCT_CRC_HE/main.py \
 --input_size='224,224' \
 --batch_size=32 \
 --num_gpus=1 \
---num_epochs=10 \
+--num_epochs=$DS_PATHOLOGYCLS_EPOCHS \
 --start_epoch=0 \
 --learning_rate=$lr \
 --num_classes=9 \
@@ -243,7 +248,7 @@ meid='_'$exp_name'/seed_'$seed'/lr_'$lr'/'
 
 path_id=$task_id$meid
 echo $task_id" Training - shallow"
-snapshot_dir="${SNAPSHOT_ROOT}/downstream/dim_2${path_id}"
+snapshot_dir="${SNAPSHOT_ROOT}/downstream/dim_2/${path_id}"
 mkdir -p $snapshot_dir
 CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/NCT_CRC_HE/main.py \
 --arch='unified_vit' \
@@ -252,7 +257,7 @@ CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/NCT_CRC_HE/main.py \
 --input_size='224,224' \
 --batch_size=32 \
 --num_gpus=1 \
---num_epochs=10 \
+--num_epochs=$DS_PATHOLOGYCLS_EPOCHS \
 --start_epoch=0 \
 --learning_rate=$lr \
 --num_classes=9 \
@@ -267,7 +272,7 @@ meid='_'$exp_name'/seed_'$seed'/lr_'$lr'/'
 
 path_id=$task_id$meid
 echo $task_id" Training - shallow"
-snapshot_dir="${SNAPSHOT_ROOT}/downstream/dim_2${path_id}"
+snapshot_dir="${SNAPSHOT_ROOT}/downstream/dim_2/${path_id}"
 mkdir -p $snapshot_dir
 CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/NCT_CRC_HE/main.py \
 --arch='unified_vit' \
@@ -276,7 +281,7 @@ CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/NCT_CRC_HE/main.py \
 --input_size='224,224' \
 --batch_size=32 \
 --num_gpus=1 \
---num_epochs=10 \
+--num_epochs=$DS_PATHOLOGYCLS_EPOCHS \
 --start_epoch=0 \
 --learning_rate=$lr \
 --num_classes=9 \
@@ -303,7 +308,7 @@ seed=0
 meid='_'$exp_name'/seed_'$seed'/lr_'$lr'/'
 path_id=$task_id$meid
 echo $task_id" Training - shallow"
-snapshot_dir="${SNAPSHOT_ROOT}/downstream/dim_2${path_id}"
+snapshot_dir="${SNAPSHOT_ROOT}/downstream/dim_2/${path_id}"
 mkdir -p $snapshot_dir
 CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/Glas/train.py \
 --arch='unified_vit' \
@@ -313,7 +318,7 @@ CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/Glas/train.py \
 --input_size='512,512' \
 --batch_size=4 \
 --num_gpus=1 \
---num_epochs=100 \
+--num_epochs=$DS_PATHOLOGYSEG_EPOCHS \
 --start_epoch=0 \
 --learning_rate=$lr \
 --num_classes=1 \
@@ -347,7 +352,7 @@ seed=10
 meid='_'$exp_name'/seed_'$seed'/lr_'$lr'/'
 path_id=$task_id$meid
 echo $task_id" Training - shallow"
-snapshot_dir="${SNAPSHOT_ROOT}/downstream/dim_2${path_id}"
+snapshot_dir="${SNAPSHOT_ROOT}/downstream/dim_2/${path_id}"
 mkdir -p $snapshot_dir
 CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/Glas/train.py \
 --arch='unified_vit' \
@@ -357,7 +362,7 @@ CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/Glas/train.py \
 --input_size='512,512' \
 --batch_size=4 \
 --num_gpus=1 \
---num_epochs=100 \
+--num_epochs=$DS_PATHOLOGYSEG_EPOCHS \
 --start_epoch=0 \
 --learning_rate=$lr \
 --num_classes=1 \
@@ -391,7 +396,7 @@ seed=100
 meid='_'$exp_name'/seed_'$seed'/lr_'$lr'/'
 path_id=$task_id$meid
 echo $task_id" Training - shallow"
-snapshot_dir="${SNAPSHOT_ROOT}/downstream/dim_2${path_id}"
+snapshot_dir="${SNAPSHOT_ROOT}/downstream/dim_2/${path_id}"
 mkdir -p $snapshot_dir
 CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/Glas/train.py \
 --arch='unified_vit' \
@@ -401,7 +406,7 @@ CUDA_VISIBLE_DEVICES=$gpu_id python -u Downstream/Dim_2/Glas/train.py \
 --input_size='512,512' \
 --batch_size=4 \
 --num_gpus=1 \
---num_epochs=100 \
+--num_epochs=$DS_PATHOLOGYSEG_EPOCHS \
 --start_epoch=0 \
 --learning_rate=$lr \
 --num_classes=1 \
