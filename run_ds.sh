@@ -11,9 +11,9 @@ DS_REPORT="${DATA_ROOT}/ds_report"
 DS_XRAY="${DATA_ROOT}/ds_xray"
 DS_PATH_CLS="${DATA_ROOT}/ds_pathology_cls"
 DS_PATH_SEG="${DATA_ROOT}/ds_pathology_seg"
-SNAPSHOT_ROOT=/workspace/snapshots
+SNAPSHOT_ROOT=/tmp/snapshots
 
-PRETRAINED_CKPT=/workspace/output_dir/MedCoSS_Report_Xray_Path_buff_0.05_cen_0.01_2D_Path_300/checkpoint-299.pth
+PRETRAINED_CKPT=/tmp/output_dir/MedCoSS_Report_Xray_Path_buff_0.05_cen_0.01_2D_Path_300/checkpoint-299.pth
 
 gpu_id=0
 
