@@ -6,7 +6,7 @@
 set -euo pipefail
 
 # --- Run length ---
-EPOCHS=1
+EPOCHS=300
 LAST_EPOCH=$((EPOCHS - 1))
 RUN_TAG="${EPOCHS}epoch"
 if (( EPOCHS > 80 )); then WARMUP_EPOCHS=40; else WARMUP_EPOCHS=1; fi
@@ -54,7 +54,7 @@ case "$STAGE" in
     ${DIST_LAUNCH} --master_port='29502' main_pretrain_single_modal.py \
     --model "unified_vit" \
     --batch_size 128 \
-    --num_workers 2 \
+    --num_workers 10 \
     --norm_pix_loss \
     --mask_ratio 0.75 \
     --epochs "${EPOCHS}" \
@@ -84,12 +84,12 @@ PY
 
     CUDA_VISIBLE_DEVICES=0 python main_buffer_kmean.py \
     --model "unified_vit" \
-    --num_workers 2 \
+    --num_workers 10 \
     --norm_pix_loss \
     --data_path "${US_REPORT}" \
     --task_modality "1D_text" \
     --load_current_pretrained_weight "$STAGE1_CKPT" \
-    --num_center 0.001 \
+    --num_center 0.01 \
     --buffer_ratio 0.05 \
     --exp_name "kmean"
     ;;
@@ -109,7 +109,7 @@ PY
     ${DIST_LAUNCH} --master_port='29361' main_pretrain_medcoss.py \
     --model "unified_vit" \
     --batch_size 128 \
-    --num_workers 2 \
+    --num_workers 10 \
     --norm_pix_loss \
     --mask_ratio 0.75 \
     --epochs "${EPOCHS}" \
@@ -144,12 +144,12 @@ PY
 
     CUDA_VISIBLE_DEVICES=0 python main_buffer_kmean.py \
     --model "unified_vit" \
-    --num_workers 2 \
+    --num_workers 10 \
     --norm_pix_loss \
     --data_path "${US_XRAY}" \
     --task_modality "2D_xray" \
     --load_current_pretrained_weight "$STAGE2_CKPT" \
-    --num_center 0.001 \
+    --num_center 0.01 \
     --buffer_ratio 0.05 \
     --exp_name "kmean"
     ;;
@@ -169,7 +169,7 @@ PY
     ${DIST_LAUNCH} --master_port='29362' main_pretrain_medcoss.py \
     --model "unified_vit" \
     --batch_size 128 \
-    --num_workers 2 \
+    --num_workers 10 \
     --norm_pix_loss \
     --mask_ratio 0.75 \
     --epochs "${EPOCHS}" \
