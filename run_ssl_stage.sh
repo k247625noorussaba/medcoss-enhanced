@@ -84,7 +84,7 @@ PY
 
     CUDA_VISIBLE_DEVICES=0 python main_buffer_kmean.py \
     --model "unified_vit" \
-    --num_workers 2 \
+    --num_workers 0 \
     --norm_pix_loss \
     --data_path "${US_REPORT}" \
     --task_modality "1D_text" \
