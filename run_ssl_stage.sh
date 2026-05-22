@@ -89,7 +89,7 @@ PY
     --data_path "${US_REPORT}" \
     --task_modality "1D_text" \
     --load_current_pretrained_weight "$STAGE1_CKPT" \
-    --num_center 0.01 \
+    --num_center 0.001 \
     --buffer_ratio 0.05 \
     --exp_name "kmean"
     ;;
