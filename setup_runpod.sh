@@ -5,15 +5,45 @@ echo "== Updating apt =="
 apt update
 
 echo "== Installing system packages =="
-apt install -y libgl1 libglib2.0-0 git curl openssh-server python3-pip rsync tree tmux
+apt install -y \
+  libgl1 \
+  libglib2.0-0 \
+  git \
+  curl \
+  openssh-server \
+  python3-pip \
+  rsync \
+  tree \
+  tmux \
+  net-tools
+
+echo "== Moving to MedCoSS repo =="
+cd /workspace/MedCoSS
+
+echo "== Checking Python =="
+if [ ! -d "venv" ]; then
+  echo "venv not found. Creating venv with python3.8..."
+  python3.8 -m venv venv
+fi
+
+echo "== Activating venv =="
+source venv/bin/activate
+
+echo "== Python path =="
+which python
+python --version
+
+echo "== Upgrading pip/setuptools/wheel =="
+python -m pip install --upgrade pip setuptools wheel
 
 echo "== Installing Python requirements =="
-pip install -r requirements_runpod.txt
+python -m pip install -r requirements_runpod.txt
 
-echo "== Downloading NLTK punkt =="
+echo "== Downloading NLTK data =="
 python - <<'PY'
 import nltk
 nltk.download("punkt")
+nltk.download("punkt_tab")
 PY
 
 echo "== Verifying key imports =="
@@ -27,6 +57,16 @@ mods = [
 for m in mods:
     __import__(m)
     print("OK:", m)
+PY
+
+echo "== Verifying CUDA =="
+python - <<'PY'
+import torch
+print("torch:", torch.__version__)
+print("cuda available:", torch.cuda.is_available())
+print("gpu count:", torch.cuda.device_count())
+for i in range(torch.cuda.device_count()):
+    print(i, torch.cuda.get_device_name(i))
 PY
 
 echo "RunPod setup complete."
