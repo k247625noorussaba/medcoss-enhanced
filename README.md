@@ -1058,8 +1058,7 @@ For a specific process:
 
 ```bash
 ps aux | grep main_buffer_kmean
-top -p <PID>
-top -p 203372     # example
+top -p <PID>     # example: top -p 203372
 ```
 
 Check active Python/training processes:
