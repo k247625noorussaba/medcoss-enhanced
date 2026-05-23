@@ -551,6 +551,7 @@ These are needed for:
 - Python package installation
 - File copying and monitoring
 - Long-running training sessions
+- CPU/RAM/process monitoring with `htop`
 
 ---
 
@@ -739,6 +740,7 @@ apt install -y \
   rsync \
   tree \
   tmux \
+  htop \
   net-tools
 
 echo "== Moving to MedCoSS repo =="
@@ -1037,6 +1039,27 @@ Monitor GPU usage:
 
 ```bash
 watch -n 2 nvidia-smi
+```
+
+Monitor CPU/RAM/processes interactively:
+
+```bash
+htop
+```
+
+Useful interpretation:
+
+- High GPU usage + active logs = healthy training.
+- GPU low but CPU high = likely dataloader or KMeans CPU work.
+- GPU low + CPU low + no logs = possibly stuck.
+- During buffer KMeans, GPU may be 0% while CPU is high; this can be normal.
+
+For a specific process:
+
+```bash
+ps aux | grep main_buffer_kmean
+top -p <PID>
+top -p 203372     # example
 ```
 
 Check active Python/training processes:
