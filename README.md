@@ -540,7 +540,7 @@ Install system-level dependencies with `apt`, not `pip`.
 
 ```bash
 apt update
-apt install -y libgl1 libglib2.0-0 git curl openssh-server python3-pip rsync tree tmux net-tools
+apt install -y libgl1 libglib2.0-0 git curl openssh-server python3-pip rsync tree tmux htop net-tools
 ```
 
 These are needed for:
