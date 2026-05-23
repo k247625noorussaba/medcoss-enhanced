@@ -15,6 +15,7 @@ apt install -y \
   rsync \
   tree \
   tmux \
+  htop \
   net-tools
 
 echo "== Moving to MedCoSS repo =="
