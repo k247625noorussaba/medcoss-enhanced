@@ -12,7 +12,7 @@
 set -euo pipefail
 
 # --- Run length of SSL checkpoint to load ---
-EPOCHS=1
+EPOCHS=300
 LAST_EPOCH=$((EPOCHS - 1))
 RUN_TAG="${EPOCHS}epoch"
 
