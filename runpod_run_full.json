@@ -115,5 +115,364 @@
                 }
             }
         }
+    },
+    "0": {
+        "created_at": "2026-05-25T00:43:46",
+        "snapshot_root": "/tmp/snapshots",
+        "metrics_file_count": 12,
+        "seed_results": [
+            {
+                "PudMed20k": {
+                    "seeds": [
+                        {
+                            "seed": 0,
+                            "acc": 0.8364028538244566,
+                            "auc": 0.9534857090530047,
+                            "f1": 0.7804190681397563
+                        },
+                        {
+                            "seed": 10,
+                            "acc": 0.8390575742492119,
+                            "auc": 0.9543296367600249,
+                            "f1": 0.7825344988552683
+                        },
+                        {
+                            "seed": 100,
+                            "acc": 0.8389248382279741,
+                            "auc": 0.9554648672202898,
+                            "f1": 0.7811272549268915
+                        }
+                    ],
+                    "average": {
+                        "acc": {
+                            "mean": 0.8381284221005475,
+                            "std": 0.0014958589904874701,
+                            "n": 3
+                        },
+                        "auc": {
+                            "mean": 0.9544267376777731,
+                            "std": 0.0009931456106500689,
+                            "n": 3
+                        },
+                        "f1": {
+                            "mean": 0.781360273973972,
+                            "std": 0.0010767939381607081,
+                            "n": 3
+                        }
+                    }
+                }
+            },
+            {
+                "Chest_XR": {
+                    "seeds": [
+                        {
+                            "seed": 0,
+                            "acc": 0.9858179419525066,
+                            "auc": 0.9990409061811252,
+                            "f1": 0.9813015135503697
+                        },
+                        {
+                            "seed": 10,
+                            "acc": 0.9864775725593667,
+                            "auc": 0.9987385228932125,
+                            "f1": 0.9844664073611358
+                        },
+                        {
+                            "seed": 100,
+                            "acc": 0.9854881266490765,
+                            "auc": 0.9982821076304201,
+                            "f1": 0.9801138663047212
+                        }
+                    ],
+                    "average": {
+                        "acc": {
+                            "mean": 0.9859278803869833,
+                            "std": 0.0005038011977743989,
+                            "n": 3
+                        },
+                        "auc": {
+                            "mean": 0.998687178901586,
+                            "std": 0.00038199602647819594,
+                            "n": 3
+                        },
+                        "f1": {
+                            "mean": 0.9819605957387422,
+                            "std": 0.0022498767544503655,
+                            "n": 3
+                        }
+                    }
+                }
+            },
+            {
+                "NCT_CRC_HE": {
+                    "seeds": [
+                        {
+                            "seed": 0,
+                            "acc": 0.9951557093425606,
+                            "auc": 0.9999412117242691,
+                            "f1": 0.9936108641166955
+                        },
+                        {
+                            "seed": 10,
+                            "acc": 0.9937716262975779,
+                            "auc": 0.9999141070173825,
+                            "f1": 0.9914120000994178
+                        },
+                        {
+                            "seed": 100,
+                            "acc": 0.995847750865052,
+                            "auc": 0.9999081126637481,
+                            "f1": 0.9942336101464816
+                        }
+                    ],
+                    "average": {
+                        "acc": {
+                            "mean": 0.9949250288350635,
+                            "std": 0.0010571108869563807,
+                            "n": 3
+                        },
+                        "auc": {
+                            "mean": 0.9999211438017999,
+                            "std": 1.763587828959518e-05,
+                            "n": 3
+                        },
+                        "f1": {
+                            "mean": 0.9930854914541983,
+                            "std": 0.001482357291713929,
+                            "n": 3
+                        }
+                    }
+                }
+            },
+            {
+                "GlaS": {
+                    "seeds": [
+                        {
+                            "seed": 0,
+                            "dice": 0.8823014260077343,
+                            "hd": 48.362321610657276
+                        },
+                        {
+                            "seed": 10,
+                            "dice": 0.8764397430912918,
+                            "hd": 50.311747725009766
+                        },
+                        {
+                            "seed": 100,
+                            "dice": 0.8875587796166601,
+                            "hd": 48.89895435907518
+                        }
+                    ],
+                    "average": {
+                        "dice": {
+                            "mean": 0.8820999829052287,
+                            "std": 0.005562254741179943,
+                            "n": 3
+                        },
+                        "hd": {
+                            "mean": 49.191007898247406,
+                            "std": 1.0069940397723969,
+                            "n": 3
+                        }
+                    }
+                }
+            }
+        ],
+        "averages": {
+            "PudMed20k": {
+                "acc": {
+                    "mean": 0.8381284221005475,
+                    "std": 0.0014958589904874701,
+                    "n": 3
+                },
+                "auc": {
+                    "mean": 0.9544267376777731,
+                    "std": 0.0009931456106500689,
+                    "n": 3
+                },
+                "f1": {
+                    "mean": 0.781360273973972,
+                    "std": 0.0010767939381607081,
+                    "n": 3
+                }
+            },
+            "Chest_XR": {
+                "acc": {
+                    "mean": 0.9859278803869833,
+                    "std": 0.0005038011977743989,
+                    "n": 3
+                },
+                "auc": {
+                    "mean": 0.998687178901586,
+                    "std": 0.00038199602647819594,
+                    "n": 3
+                },
+                "f1": {
+                    "mean": 0.9819605957387422,
+                    "std": 0.0022498767544503655,
+                    "n": 3
+                }
+            },
+            "NCT_CRC_HE": {
+                "acc": {
+                    "mean": 0.9949250288350635,
+                    "std": 0.0010571108869563807,
+                    "n": 3
+                },
+                "auc": {
+                    "mean": 0.9999211438017999,
+                    "std": 1.763587828959518e-05,
+                    "n": 3
+                },
+                "f1": {
+                    "mean": 0.9930854914541983,
+                    "std": 0.001482357291713929,
+                    "n": 3
+                }
+            },
+            "GlaS": {
+                "dice": {
+                    "mean": 0.8820999829052287,
+                    "std": 0.005562254741179943,
+                    "n": 3
+                },
+                "hd": {
+                    "mean": 49.191007898247406,
+                    "std": 1.0069940397723969,
+                    "n": 3
+                }
+            }
+        },
+        "raw_metrics": [
+            {
+                "task": "PudMed20k",
+                "split": "test",
+                "acc": 0.8364028538244566,
+                "auc": 0.9534857090530047,
+                "f1": 0.7804190681397563,
+                "snapshot_dir": "/tmp/snapshots/downstream/dim_1/1D_PubMed_MedCoSS_Report_Xray_Path_buff_0.05_300epoch/seed_0/lr_0.0002/",
+                "pretrained_path": "/tmp/output_dir/MedCoSS_Report_Xray_Path_buff_0.05_cen_0.01_2D_Path_300epoch/checkpoint-299.pth",
+                "_metrics_file": "/tmp/snapshots/downstream/dim_1/1D_PubMed_MedCoSS_Report_Xray_Path_buff_0.05_300epoch/seed_0/lr_0.0002/metrics.json",
+                "_seed": 0
+            },
+            {
+                "task": "PudMed20k",
+                "split": "test",
+                "acc": 0.8390575742492119,
+                "auc": 0.9543296367600249,
+                "f1": 0.7825344988552683,
+                "snapshot_dir": "/tmp/snapshots/downstream/dim_1/1D_PubMed_MedCoSS_Report_Xray_Path_buff_0.05_300epoch/seed_10/lr_0.0002/",
+                "pretrained_path": "/tmp/output_dir/MedCoSS_Report_Xray_Path_buff_0.05_cen_0.01_2D_Path_300epoch/checkpoint-299.pth",
+                "_metrics_file": "/tmp/snapshots/downstream/dim_1/1D_PubMed_MedCoSS_Report_Xray_Path_buff_0.05_300epoch/seed_10/lr_0.0002/metrics.json",
+                "_seed": 10
+            },
+            {
+                "task": "PudMed20k",
+                "split": "test",
+                "acc": 0.8389248382279741,
+                "auc": 0.9554648672202898,
+                "f1": 0.7811272549268915,
+                "snapshot_dir": "/tmp/snapshots/downstream/dim_1/1D_PubMed_MedCoSS_Report_Xray_Path_buff_0.05_300epoch/seed_100/lr_0.0002/",
+                "pretrained_path": "/tmp/output_dir/MedCoSS_Report_Xray_Path_buff_0.05_cen_0.01_2D_Path_300epoch/checkpoint-299.pth",
+                "_metrics_file": "/tmp/snapshots/downstream/dim_1/1D_PubMed_MedCoSS_Report_Xray_Path_buff_0.05_300epoch/seed_100/lr_0.0002/metrics.json",
+                "_seed": 100
+            },
+            {
+                "task": "Chest_XR",
+                "split": "test",
+                "acc": 0.9858179419525066,
+                "auc": 0.9990409061811252,
+                "f1": 0.9813015135503697,
+                "snapshot_dir": "/tmp/snapshots/downstream/dim_2/2D_ChestXR_MedCoSS_Report_Xray_Path_buff_0.05_300epoch/seed_0/lr_0.00005/",
+                "pretrained_path": "/tmp/output_dir/MedCoSS_Report_Xray_Path_buff_0.05_cen_0.01_2D_Path_300epoch/checkpoint-299.pth",
+                "_metrics_file": "/tmp/snapshots/downstream/dim_2/2D_ChestXR_MedCoSS_Report_Xray_Path_buff_0.05_300epoch/seed_0/lr_0.00005/metrics.json",
+                "_seed": 0
+            },
+            {
+                "task": "Chest_XR",
+                "split": "test",
+                "acc": 0.9864775725593667,
+                "auc": 0.9987385228932125,
+                "f1": 0.9844664073611358,
+                "snapshot_dir": "/tmp/snapshots/downstream/dim_2/2D_ChestXR_MedCoSS_Report_Xray_Path_buff_0.05_300epoch/seed_10/lr_0.00005/",
+                "pretrained_path": "/tmp/output_dir/MedCoSS_Report_Xray_Path_buff_0.05_cen_0.01_2D_Path_300epoch/checkpoint-299.pth",
+                "_metrics_file": "/tmp/snapshots/downstream/dim_2/2D_ChestXR_MedCoSS_Report_Xray_Path_buff_0.05_300epoch/seed_10/lr_0.00005/metrics.json",
+                "_seed": 10
+            },
+            {
+                "task": "Chest_XR",
+                "split": "test",
+                "acc": 0.9854881266490765,
+                "auc": 0.9982821076304201,
+                "f1": 0.9801138663047212,
+                "snapshot_dir": "/tmp/snapshots/downstream/dim_2/2D_ChestXR_MedCoSS_Report_Xray_Path_buff_0.05_300epoch/seed_100/lr_0.00005/",
+                "pretrained_path": "/tmp/output_dir/MedCoSS_Report_Xray_Path_buff_0.05_cen_0.01_2D_Path_300epoch/checkpoint-299.pth",
+                "_metrics_file": "/tmp/snapshots/downstream/dim_2/2D_ChestXR_MedCoSS_Report_Xray_Path_buff_0.05_300epoch/seed_100/lr_0.00005/metrics.json",
+                "_seed": 100
+            },
+            {
+                "task": "NCT_CRC_HE",
+                "split": "test",
+                "acc": 0.9951557093425606,
+                "auc": 0.9999412117242691,
+                "f1": 0.9936108641166955,
+                "snapshot_dir": "/tmp/snapshots/downstream/dim_2/2D_NCT_CRC_HE_MedCoSS_Report_Xray_Path_buff_0.05_300epoch/seed_0/lr_0.0001/",
+                "pretrained_path": "/tmp/output_dir/MedCoSS_Report_Xray_Path_buff_0.05_cen_0.01_2D_Path_300epoch/checkpoint-299.pth",
+                "_metrics_file": "/tmp/snapshots/downstream/dim_2/2D_NCT_CRC_HE_MedCoSS_Report_Xray_Path_buff_0.05_300epoch/seed_0/lr_0.0001/metrics.json",
+                "_seed": 0
+            },
+            {
+                "task": "NCT_CRC_HE",
+                "split": "test",
+                "acc": 0.9937716262975779,
+                "auc": 0.9999141070173825,
+                "f1": 0.9914120000994178,
+                "snapshot_dir": "/tmp/snapshots/downstream/dim_2/2D_NCT_CRC_HE_MedCoSS_Report_Xray_Path_buff_0.05_300epoch/seed_10/lr_0.0001/",
+                "pretrained_path": "/tmp/output_dir/MedCoSS_Report_Xray_Path_buff_0.05_cen_0.01_2D_Path_300epoch/checkpoint-299.pth",
+                "_metrics_file": "/tmp/snapshots/downstream/dim_2/2D_NCT_CRC_HE_MedCoSS_Report_Xray_Path_buff_0.05_300epoch/seed_10/lr_0.0001/metrics.json",
+                "_seed": 10
+            },
+            {
+                "task": "NCT_CRC_HE",
+                "split": "test",
+                "acc": 0.995847750865052,
+                "auc": 0.9999081126637481,
+                "f1": 0.9942336101464816,
+                "snapshot_dir": "/tmp/snapshots/downstream/dim_2/2D_NCT_CRC_HE_MedCoSS_Report_Xray_Path_buff_0.05_300epoch/seed_100/lr_0.0001/",
+                "pretrained_path": "/tmp/output_dir/MedCoSS_Report_Xray_Path_buff_0.05_cen_0.01_2D_Path_300epoch/checkpoint-299.pth",
+                "_metrics_file": "/tmp/snapshots/downstream/dim_2/2D_NCT_CRC_HE_MedCoSS_Report_Xray_Path_buff_0.05_300epoch/seed_100/lr_0.0001/metrics.json",
+                "_seed": 100
+            },
+            {
+                "task": "GlaS",
+                "split": "test",
+                "dice": 0.8823014260077343,
+                "hd": 48.362321610657276,
+                "snapshot_dir": null,
+                "save_path": "/tmp/snapshots/downstream/dim_2/Glas_MedCoSS_Report_Xray_Path_buff_0.05_300epoch/seed_0/lr_0.0001//prediction/",
+                "_metrics_file": "/tmp/snapshots/downstream/dim_2/Glas_MedCoSS_Report_Xray_Path_buff_0.05_300epoch/seed_0/lr_0.0001/prediction/metrics.json",
+                "_seed": 0
+            },
+            {
+                "task": "GlaS",
+                "split": "test",
+                "dice": 0.8764397430912918,
+                "hd": 50.311747725009766,
+                "snapshot_dir": null,
+                "save_path": "/tmp/snapshots/downstream/dim_2/Glas_MedCoSS_Report_Xray_Path_buff_0.05_300epoch/seed_10/lr_0.0001//prediction/",
+                "_metrics_file": "/tmp/snapshots/downstream/dim_2/Glas_MedCoSS_Report_Xray_Path_buff_0.05_300epoch/seed_10/lr_0.0001/prediction/metrics.json",
+                "_seed": 10
+            },
+            {
+                "task": "GlaS",
+                "split": "test",
+                "dice": 0.8875587796166601,
+                "hd": 48.89895435907518,
+                "snapshot_dir": null,
+                "save_path": "/tmp/snapshots/downstream/dim_2/Glas_MedCoSS_Report_Xray_Path_buff_0.05_300epoch/seed_100/lr_0.0001//prediction/",
+                "_metrics_file": "/tmp/snapshots/downstream/dim_2/Glas_MedCoSS_Report_Xray_Path_buff_0.05_300epoch/seed_100/lr_0.0001/prediction/metrics.json",
+                "_seed": 100
+            }
+        ]
     }
 }
